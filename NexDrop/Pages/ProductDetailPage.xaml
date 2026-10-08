@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:QuickDrop.Helpers"
+             x:Class="QuickDrop.Pages.ProductDetailPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="#F8FAFC">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#EA580C</Color>
+            <Color x:Key="PrimaryContainer">#F97316</Color>
+            <Color x:Key="Surface">#F8FAFC</Color>
+            <Color x:Key="SurfaceContainerLowest">#FFFFFF</Color>
+            <Color x:Key="SurfaceContainerLow">#F1F5F9</Color>
+            <Color x:Key="SurfaceContainerHighest">#E2E8F0</Color>
+            <Color x:Key="MainText">#0F172A</Color>
+            <Color x:Key="SecondaryText">#64748B</Color>
+            <Color x:Key="Secondary">#64748B</Color>
+            <Color x:Key="Tertiary">#EF4444</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*, Auto, Auto, Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="16" Padding="0,0,0,24">
+
+                <!-- 1. TOP HEADER -->
+                <Border BackgroundColor="#FFFFFF" StrokeThickness="1" Stroke="#F1F5F9" Padding="16,12">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="10"/>
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto, *, Auto" VerticalOptions="Center">
+                        <!-- Back Button -->
+                        <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" StrokeThickness="1" Stroke="#E2E8F0" StrokeShape="RoundRectangle 12" BackgroundColor="#FFFFFF" VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnBackTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xe5c4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#0F172A" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+
+                        <!-- Title -->
+                        <Label Grid.Column="1" Text="Product Details" FontSize="18" FontAttributes="Bold" TextColor="#0F172A" HorizontalOptions="Center" VerticalOptions="Center" />
+
+                        <!-- Profile Avatar -->
+                        <Border Grid.Column="2" WidthRequest="36" HeightRequest="36" StrokeThickness="1.5" Stroke="#EA580C" StrokeShape="RoundRectangle 18" BackgroundColor="#F8FAFC" VerticalOptions="Center">
+                            <Image Source="{Binding UserProfileImage}" Aspect="AspectFill" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- 2. EXPRESS BADGE & QUICK ICONS -->
+                <Grid ColumnDefinitions="*, Auto" Padding="16,0" VerticalOptions="Center">
+                    <Border Grid.Column="0" BackgroundColor="#ECFDF5" StrokeThickness="1" Stroke="#A7F3D0" StrokeShape="RoundRectangle 12" Padding="10,6" HorizontalOptions="Start" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Label Text="⚡" FontSize="11" VerticalOptions="Center" />
+                            <Label Text="10-15 MIN EXPRESS DELIVERY" FontSize="10" FontAttributes="Bold" TextColor="#047857" VerticalOptions="Center" CharacterSpacing="0.5"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                        <Border WidthRequest="36" HeightRequest="36" StrokeThickness="1" Stroke="#E2E8F0" StrokeShape="RoundRectangle 12" BackgroundColor="#FFFFFF">
+                            <Label Text="&#xe87e;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#0F172A" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+
+                        <Border WidthRequest="36" HeightRequest="36" StrokeThickness="1" Stroke="#E2E8F0" StrokeShape="RoundRectangle 12" BackgroundColor="#FFFFFF">
+                            <Path Data="M18,16.08 C17.24,16.08 16.56,16.38 16.04,16.85 L8.91,12.7 C8.96,12.47 9,12.24 9,12 C9,11.76 8.96,11.53 8.91,11.3 L15.96,7.19 C16.5,7.69 17.21,8 18,8 C19.66,8 21,6.66 21,5 C21,3.34 19.66,2 18,2 C16.34,2 15,3.34 15,5 C15,5.24 15.04,5.47 15.09,5.7 L8.04,9.81 C7.5,9.31 6.79,9 6,9 C4.34,9 3,10.34 3,12 C3,13.66 4.34,15 6,15 C6.79,15 7.5,14.69 8.04,14.19 L15.16,18.34 C15.11,18.55 15.08,18.76 15.08,19 C15.08,20.61 16.39,21.92 18,21.92 C19.61,21.92 20.92,20.61 20.92,19 C20.92,17.39 19.61,16.08 18,16.08 Z" 
+                                  Fill="#0F172A" Aspect="Uniform" WidthRequest="16" HeightRequest="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </HorizontalStackLayout>
+                </Grid>
+
+                <!-- 3. PRODUCT IMAGE GALLERY -->
+                <Border Margin="16,0" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 20" Stroke="#F1F5F9" StrokeThickness="1" HeightRequest="290">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A" Offset="0,4" Opacity="0.04" Radius="14"/>
+                    </Border.Shadow>
+                    <Grid>
+                        <!-- Discount Badge -->
+                        <Border HorizontalOptions="Start" VerticalOptions="Start" BackgroundColor="#EF4444" StrokeShape="RoundRectangle 10" StrokeThickness="0" Padding="8,4" Margin="14" IsVisible="{Binding CurrentProduct.HasDiscount}">
+                            <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                <Label Text="&#xe54e;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="13" TextColor="#FFFFFF" VerticalOptions="Center" />
+                                <Label Text="{Binding CurrentProduct.DiscountPercentage, StringFormat='%{0} OFF'}" FontSize="11" FontAttributes="Bold" TextColor="#FFFFFF" VerticalOptions="Center" CharacterSpacing="0.5"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Freshness Guarantee -->
+                        <Border HorizontalOptions="End" VerticalOptions="Start" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" Padding="8,4" Margin="14">
+                            <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                <Label Text="🛡️" FontSize="11" VerticalOptions="Center"/>
+                                <Label Text="Freshness Guarantee" FontSize="10" FontAttributes="Bold" TextColor="#64748B" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <CollectionView ItemsSource="{Binding CurrentProduct.ImageList}" HeightRequest="220" Margin="0,35,0,15" HorizontalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" SnapPointsType="MandatorySingle" SnapPointsAlignment="Center" ItemSpacing="20" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentView WidthRequest="300">
+                                        <Image Source="{Binding .}" Aspect="AspectFit" Margin="12" />
+                                    </ContentView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- 4. PRODUCT INFO & PRICING CARD -->
+                <Border Margin="16,0" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 20" StrokeThickness="1" Stroke="#F1F5F9" Padding="20">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A" Offset="0,4" Opacity="0.04" Radius="14"/>
+                    </Border.Shadow>
+                    <VerticalStackLayout Spacing="10">
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <Label Text="{Binding CurrentProduct.Brand}" FontSize="14" FontAttributes="Bold" TextColor="#EA580C" TextTransform="Uppercase" VerticalOptions="Center" />
+                                <Border BackgroundColor="#ECFDF5" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="5,2">
+                                    <Label Text="Verified" FontSize="9" FontAttributes="Bold" TextColor="#047857" />
+                                </Border>
+                            </HorizontalStackLayout>
+
+                            <Border Grid.Column="1" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="#E2E8F0" Padding="8,4">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Label Text="⏱️" FontSize="10" VerticalOptions="Center" />
+                                    <Label Text="10-15 min express" FontSize="10" FontAttributes="Bold" TextColor="#64748B" VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <Label Text="{Binding CurrentProduct.Name}" FontSize="20" FontAttributes="Bold" TextColor="#0F172A" LineHeight="1.2"/>
+                        <Label Text="{Binding CurrentProduct.Description}" FontSize="13" TextColor="#64748B" LineHeight="1.3" />
+
+                        <!-- Review row -->
+                        <HorizontalStackLayout Spacing="8" Margin="0,2,0,0" VerticalOptions="Center">
+                            <Border BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="#FDBA74" Padding="6,3">
+                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                    <Path Data="M12,17.27 L18.18,21 L16.54,13.97 L22,9.24 L14.81,8.62 L12,2 L9.19,8.62 L2,9.24 L7.45,13.97 L5.82,21 L12,17.27 Z" Fill="#F97316" Aspect="Uniform" WidthRequest="11" HeightRequest="11" VerticalOptions="Center" />
+                                    <Label Text="4.8" FontSize="11" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Label Text="1,240 Reviews" FontSize="12" FontAttributes="Bold" TextColor="#64748B" VerticalOptions="Center" />
+                            <Border WidthRequest="4" HeightRequest="4" StrokeShape="RoundRectangle 2" BackgroundColor="#CBD5E1" VerticalOptions="Center" />
+                            <Label Text="Best Seller" FontSize="12" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+
+                        <!-- Price Bento Card -->
+                        <Border Margin="0,8,0,0" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 14" Stroke="#E2E8F0" StrokeThickness="1" Padding="16">
+                            <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="0">
+                                    <Label Text="{Binding CurrentProduct.OldPrice, StringFormat='${0:N2}'}" FontSize="12" FontAttributes="Bold" TextColor="#94A3B8" TextDecorations="Strikethrough" IsVisible="{Binding CurrentProduct.HasDiscount}" />
+                                    <HorizontalStackLayout Spacing="2" VerticalOptions="End">
+                                        <Label Text="$" FontSize="20" FontAttributes="Bold" TextColor="#0F172A" Margin="0,0,0,4" VerticalOptions="End" />
+                                        <Label Text="{Binding CurrentProduct.Price, StringFormat='{0:N2}'}" FontSize="28" FontAttributes="Bold" TextColor="#0F172A" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End" Spacing="2">
+                                    <Label Text="UNIT PRICE" FontSize="9" FontAttributes="Bold" TextColor="#94A3B8" HorizontalOptions="End" CharacterSpacing="1" />
+                                    <Label Text="{Binding CurrentProduct.Price, StringFormat='${0:N2} / Unit'}" FontSize="12" FontAttributes="Bold" TextColor="#64748B" HorizontalOptions="End" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 5. BENTO FEATURE HIGHLIGHTS -->
+                <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10" Margin="16,0">
+                    <Border Grid.Column="0" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1" Padding="12">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                            <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="#ECFDF5" HorizontalOptions="Center">
+                                <Label Text="🌱" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Source" FontSize="10" FontAttributes="Bold" TextColor="#94A3B8" HorizontalOptions="Center" />
+                            <Label Text="100% Natural" FontSize="11" FontAttributes="Bold" TextColor="#0F172A" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1" Padding="12">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                            <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="#EFF6FF" HorizontalOptions="Center">
+                                <Label Text="❄️" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Storage" FontSize="10" FontAttributes="Bold" TextColor="#94A3B8" HorizontalOptions="Center" />
+                            <Label Text="+4°C Chilled" FontSize="11" FontAttributes="Bold" TextColor="#0F172A" HorizontalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1" Padding="12">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout HorizontalOptions="Center" Spacing="4">
+                            <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="#FFF7ED" HorizontalOptions="Center">
+                                <Label Text="📦" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <Label Text="Unit" FontSize="10" FontAttributes="Bold" TextColor="#94A3B8" HorizontalOptions="Center" />
+                            <Label Text="{Binding CurrentProduct.Unit}" FontSize="11" FontAttributes="Bold" TextColor="#0F172A" HorizontalOptions="Center" LineBreakMode="TailTruncation" MaxLines="1"/>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- 6. ACCORDION DETAILS -->
+                <VerticalStackLayout Spacing="10" Margin="16,0">
+                    <!-- Product Description -->
+                    <Border BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout>
+                            <Grid ColumnDefinitions="Auto, *, Auto" Padding="16" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAccordionTapped" CommandParameter="Desc" />
+                                </Grid.GestureRecognizers>
+                                <Border Grid.Column="0" WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#FFF7ED" VerticalOptions="Center">
+                                    <Label Text="&#xe873;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#EA580C" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+                                <Label Grid.Column="1" Text="Product Description" FontSize="15" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" Margin="12,0,0,0"/>
+                                <Label x:Name="DescIcon" Grid.Column="2" Text="&#xe5ce;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748B" VerticalOptions="Center"/>
+                            </Grid>
+                            <VerticalStackLayout x:Name="DescContent" IsVisible="True" Padding="16,0,16,16">
+                                <Label Text="{Binding CurrentProduct.Description}" FontSize="13" TextColor="#64748B" LineHeight="1.4"/>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Nutrition Facts -->
+                    <Border BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout>
+                            <Grid ColumnDefinitions="Auto, *, Auto" Padding="16" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAccordionTapped" CommandParameter="Nutr" />
+                                </Grid.GestureRecognizers>
+                                <Border Grid.Column="0" WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#ECFDF5" VerticalOptions="Center">
+                                    <Label Text="&#xe917;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#047857" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+                                <Label Grid.Column="1" Text="Nutrition Facts" FontSize="15" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" Margin="12,0,0,0"/>
+                                <Label x:Name="NutrIcon" Grid.Column="2" Text="&#xe5cf;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748B" VerticalOptions="Center"/>
+                            </Grid>
+                            <VerticalStackLayout x:Name="NutrContent" IsVisible="False" Padding="16,0,16,16">
+                                <Border BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0">
+                                    <Grid ColumnDefinitions="*, *" RowDefinitions="Auto, Auto, Auto" RowSpacing="10" ColumnSpacing="20" Padding="14">
+                                        <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*, Auto">
+                                            <Label Text="Energy" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionEnergy}" FontAttributes="Bold" TextColor="#0F172A" FontSize="12"/>
+                                        </Grid>
+                                        <Grid Grid.Row="0" Grid.Column="1" ColumnDefinitions="*, Auto">
+                                            <Label Text="Fat" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionFat}" FontAttributes="Bold" TextColor="#0F172A" FontSize="12"/>
+                                        </Grid>
+                                        <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="*, Auto">
+                                            <Label Text="Protein" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionProtein}" FontAttributes="Bold" TextColor="#0F172A" FontSize="12"/>
+                                        </Grid>
+                                        <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="*, Auto">
+                                            <Label Text="Calcium" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionCalcium}" FontAttributes="Bold" TextColor="#EA580C" FontSize="12"/>
+                                        </Grid>
+                                        <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="*, Auto">
+                                            <Label Text="Carbohydrates" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionCarbs}" FontAttributes="Bold" TextColor="#0F172A" FontSize="12"/>
+                                        </Grid>
+                                        <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="*, Auto">
+                                            <Label Text="Salt" TextColor="#64748B" FontSize="12"/>
+                                            <Label Grid.Column="1" Text="{Binding CurrentProduct.NutritionSalt}" FontAttributes="Bold" TextColor="#0F172A" FontSize="12"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Storage Conditions -->
+                    <Border BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1">
+                        <Border.Shadow>
+                            <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout>
+                            <Grid ColumnDefinitions="Auto, *, Auto" Padding="16" BackgroundColor="Transparent">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAccordionTapped" CommandParameter="Storage" />
+                                </Grid.GestureRecognizers>
+                                <Border Grid.Column="0" WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#EFF6FF" VerticalOptions="Center">
+                                    <Label Text="&#xe88e;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#2563EB" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+                                <Label Grid.Column="1" Text="Storage Conditions" FontSize="15" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" Margin="12,0,0,0"/>
+                                <Label x:Name="StorageIcon" Grid.Column="2" Text="&#xe5cf;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748B" VerticalOptions="Center"/>
+                            </Grid>
+                            <VerticalStackLayout x:Name="StorageContent" IsVisible="False" Padding="16,0,16,16">
+                                <Label Text="{Binding CurrentProduct.StorageConditions}" FontSize="13" TextColor="#64748B" LineHeight="1.4"/>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- 7. SIMILAR PRODUCTS CAROUSEL -->
+                <VerticalStackLayout Spacing="10" Margin="0,8,0,16">
+                    <Grid ColumnDefinitions="*, Auto" Padding="16,0">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Similar Products" FontSize="18" FontAttributes="Bold" TextColor="#0F172A" />
+                            <Label Text="Customers also bought these items" FontSize="12" TextColor="#64748B" />
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="4">
+                            <Label Text="View All" FontSize="12" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center"/>
+                            <Label Text="&#xe5cc;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#EA580C" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <ScrollView Orientation="Horizontal" Margin="0,4,0,0" HorizontalScrollBarVisibility="Never">
+                        <HorizontalStackLayout x:Name="SimilarProductsLayout" BindableLayout.ItemsSource="{Binding SimilarProducts}" Spacing="12" Padding="16,4">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <Border WidthRequest="150" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 16" Stroke="#F1F5F9" StrokeThickness="1" Padding="12">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnSimilarProductTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Border.Shadow>
+                                            <Shadow Brush="#0F172A" Offset="0,4" Opacity="0.04" Radius="10" />
+                                        </Border.Shadow>
+                                        <VerticalStackLayout Spacing="8">
+                                            <Border HeightRequest="100" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 10" StrokeThickness="0">
+                                                <Image Source="{Binding ImageUrl}" Aspect="AspectFit" Margin="6"/>
+                                            </Border>
+                                            <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold" TextColor="#0F172A" LineBreakMode="TailTruncation" MaxLines="1" />
+                                            <Grid ColumnDefinitions="*, Auto" VerticalOptions="End">
+                                                <Label Text="{Binding Price, StringFormat='${0:N2}'}" FontSize="14" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" />
+                                                <Border Grid.Column="1" BackgroundColor="#FFF7ED" StrokeThickness="1" Stroke="#EA580C" WidthRequest="28" HeightRequest="28" StrokeShape="RoundRectangle 14">
+                                                    <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" TextColor="#EA580C" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" />
+                                                </Border>
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 8. BOTTOM STICKY ACTION BAR -->
+        <Border Grid.Row="1" BackgroundColor="#FFFFFF" StrokeThickness="1" Stroke="#F1F5F9" Padding="16,12">
+            <Border.Shadow>
+                <Shadow Brush="#0F172A" Offset="0,-4" Opacity="0.05" Radius="16" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                <!-- Quantity Stepper Pill -->
+                <Border Grid.Column="0" BackgroundColor="#F8FAFC" StrokeShape="RoundRectangle 14" StrokeThickness="1" Stroke="#E2E8F0" Padding="4">
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <Border WidthRequest="34" HeightRequest="34" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="Transparent">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnDecreaseProductQtyTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xe15b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#64748B" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Label Text="{Binding ProductCartQuantity}" FontSize="15" FontAttributes="Bold" TextColor="#0F172A" VerticalOptions="Center" WidthRequest="26" HorizontalTextAlignment="Center"/>
+                        <Border WidthRequest="34" HeightRequest="34" StrokeShape="RoundRectangle 10" StrokeThickness="0" BackgroundColor="#EA580C">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnIncreaseProductQtyTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#FFFFFF" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <!-- Primary Add to Cart Button -->
+                <Border Grid.Column="1" BackgroundColor="#EA580C" StrokeShape="RoundRectangle 14" StrokeThickness="0" Padding="18,0" HeightRequest="44">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAddToCartTapped"/>
+                    </Border.GestureRecognizers>
+                    <Grid ColumnDefinitions="Auto, *, Auto" VerticalOptions="Fill">
+                        <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                            <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#FFFFFF" VerticalOptions="Center"/>
+                            <Label Text="Add to Cart" FontSize="15" FontAttributes="Bold" TextColor="#FFFFFF" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                        <Label Grid.Column="2" Text="{Binding ProductTotalPriceText}" FontSize="15" FontAttributes="Bold" TextColor="#FFFFFF" VerticalOptions="Center" HorizontalOptions="End"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 9. FLOATING CART SUMMARY PILL -->
+        <Border Grid.Row="2" BackgroundColor="#EA580C" HeightRequest="56" Margin="16,4,16,12" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+            </Border.GestureRecognizers>
+            <Border.Shadow>
+                <Shadow Brush="#0F172A" Offset="0,6" Opacity="0.25" Radius="16" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Fill" Padding="6,0,8,0">
+                <Border Grid.Column="0" BackgroundColor="#F97316" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20" StrokeThickness="0" VerticalOptions="Center">
+                    <Label Text="{Binding UniqueCartItemCount}" FontSize="15" FontAttributes="Bold" TextColor="#FFFFFF" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="-1">
+                    <Label Text="Cart Total" FontSize="10" TextColor="#FED7AA" />
+                    <Label Text="{Binding TotalCartText}" FontSize="16" FontAttributes="Bold" TextColor="#FFFFFF" />
+                </VerticalStackLayout>
+                <Border Grid.Column="2" BackgroundColor="#FFFFFF" HeightRequest="38" Padding="16,0" StrokeShape="RoundRectangle 19" StrokeThickness="0" VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                        <Label Text="Go to Cart" FontSize="13" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center" />
+                        <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center" Margin="0,1,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 10. BOTTOM NAVBAR -->
+        <Border Grid.Row="3" BackgroundColor="#FFFFFF" StrokeThickness="1" Stroke="#F1F5F9" Padding="0,8,0,14">
+            <Border.Shadow>
+                <Shadow Brush="#0F172A" Offset="0,-4" Opacity="0.04" Radius="16" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="*,*,*,*,*" Padding="0,2">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavHomeTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Home" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavCategoriesTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Categories" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <Grid Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                        <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                        <Label Text="Cart" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Border BackgroundColor="#EA580C" WidthRequest="16" HeightRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-2,-6,0" IsVisible="{Binding HasCartItems}">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="9" FontAttributes="Bold" TextColor="#FFFFFF" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavOrdersTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Orders" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavProfileTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Profile" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

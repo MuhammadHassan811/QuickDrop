@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuickDrop.Pages.RegisterPage"
+             BackgroundColor="#f7f9fb"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <!-- NAVIGATION BAR (Header) -->
+        <Grid HeightRequest="60" Padding="16,0" BackgroundColor="#f7f9fb" VerticalOptions="Start" ZIndex="10">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.04" Offset="0,1" Radius="8"/>
+            </Grid.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" VerticalOptions="Center">
+                <HorizontalStackLayout Grid.Column="0" Spacing="8" VerticalOptions="Center">
+                    <Grid WidthRequest="44" HeightRequest="44" VerticalOptions="Center" BackgroundColor="Transparent">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackTapped"/>
+                        </Grid.GestureRecognizers>
+                        <Label Text="&#xe5c4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#191c1e" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Grid>
+                    <Image Source="logo.png" HeightRequest="28" WidthRequest="28" Aspect="AspectFit" VerticalOptions="Center"/>
+                    <Label Text="Create Account" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                </HorizontalStackLayout>
+            </Grid>
+        </Grid>
+
+        <ScrollView Margin="0,60,0,0" Padding="16,16,16,32">
+            <VerticalStackLayout Spacing="24">
+
+                <!-- Welcome Badge -->
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <Grid WidthRequest="64" HeightRequest="64" HorizontalOptions="Center" Margin="0,0,0,4">
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="8">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Image Source="logosplash.png" Aspect="AspectFit"/>
+                        </Border>
+                        <Ellipse x:Name="PingDot" WidthRequest="16" HeightRequest="16" Fill="#f97316" HorizontalOptions="End" VerticalOptions="End" TranslationX="4" TranslationY="4"/>
+                    </Grid>
+                    <Label Text="Join QuickDrop" FontSize="22" FontAttributes="Bold" TextColor="#191c1e" HorizontalOptions="Center"/>
+
+                    <!-- Fast Delivery Badge -->
+                    <Border BackgroundColor="#fff7ed" StrokeThickness="0" StrokeShape="RoundRectangle 12" Padding="8,4" HorizontalOptions="Center" Margin="0,4,0,0">
+                        <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label Text="&#xea0b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#ea580c" VerticalOptions="Center"/>
+                            <Label Text="10-MINUTE DELIVERY" FontSize="9" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" CharacterSpacing="0.5"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- FORM AREA -->
+                <VerticalStackLayout Spacing="16">
+
+                    <!-- ACCOUNT TYPE / ROLE SELECTOR -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Account Type" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Grid ColumnDefinitions="*, *, *" ColumnSpacing="8">
+                            <!-- Customer Option -->
+                            <Border x:Name="RoleCustomerCard" Grid.Column="0" BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 12" StrokeThickness="1.5" Stroke="#EA580C" Padding="8,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSelectCustomerRoleTapped"/>
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                                    <Label Text="🛒" FontSize="20" HorizontalOptions="Center"/>
+                                    <Label x:Name="RoleCustomerTitle" Text="Customer" FontSize="12" FontAttributes="Bold" TextColor="#EA580C" HorizontalOptions="Center"/>
+                                    <Label Text="Order food" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Rider Option -->
+                            <Border x:Name="RoleRiderCard" Grid.Column="1" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0" Padding="8,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSelectRiderRoleTapped"/>
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                                    <Label Text="🛵" FontSize="20" HorizontalOptions="Center"/>
+                                    <Label x:Name="RoleRiderTitle" Text="Rider" FontSize="12" FontAttributes="Bold" TextColor="#475569" HorizontalOptions="Center"/>
+                                    <Label Text="Deliver &amp; earn" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Vendor Option -->
+                            <Border x:Name="RoleVendorCard" Grid.Column="2" BackgroundColor="#FFFFFF" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0" Padding="8,10">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSelectVendorRoleTapped"/>
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
+                                    <Label Text="🏪" FontSize="20" HorizontalOptions="Center"/>
+                                    <Label x:Name="RoleVendorTitle" Text="Vendor" FontSize="12" FontAttributes="Bold" TextColor="#475569" HorizontalOptions="Center"/>
+                                    <Label Text="Sell products" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Full Name -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Full Name" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="48, *">
+                                <Label Grid.Column="0" Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Entry x:Name="NameEntry" Grid.Column="1" Placeholder="Your full name" PlaceholderColor="#cbd5e1" TextColor="#191c1e" BackgroundColor="Transparent" VerticalOptions="Center" Margin="0,0,16,0"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Email -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Email" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="48, *">
+                                <Label Grid.Column="0" Text="&#xe158;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Entry x:Name="EmailEntry" Grid.Column="1" Placeholder="Your email address" PlaceholderColor="#cbd5e1" TextColor="#191c1e" BackgroundColor="Transparent" Keyboard="Email" VerticalOptions="Center" Margin="0,0,16,0"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Phone -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Phone" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="48, Auto, *">
+                                <Label Grid.Column="0" Text="&#xe0b0;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Border Grid.Column="1" BackgroundColor="#f2f4f6" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="6,2" VerticalOptions="Center" Margin="0,0,8,0">
+                                    <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                                        <Label Text="+1" FontSize="12" FontAttributes="Bold" TextColor="#191c1e"/>
+                                        <Label Text="&#xe5cf;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#64748b"/>
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Entry x:Name="PhoneEntry" Grid.Column="2" Placeholder="(555) 000-0000" PlaceholderColor="#cbd5e1" TextColor="#191c1e" BackgroundColor="Transparent" Keyboard="Telephone" VerticalOptions="Center" Margin="0,0,16,0"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Password -->
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Password" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="48, *, 48">
+                                <Label Grid.Column="0" Text="&#xe897;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Entry x:Name="PasswordEntry" TextChanged="OnPasswordTextChanged" Grid.Column="1" IsPassword="True" Placeholder="At least 8 characters" PlaceholderColor="#cbd5e1" TextColor="#191c1e" BackgroundColor="Transparent" VerticalOptions="Center"/>
+                                <Grid Grid.Column="2" BackgroundColor="Transparent">
+                                    <Grid.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnTogglePasswordTapped"/>
+                                    </Grid.GestureRecognizers>
+                                    <Label x:Name="PasswordEyeIcon" Text="&#xe8f4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+
+                        <!-- Dynamic Password Strength Indicator -->
+                        <Grid ColumnDefinitions="*, Auto" Margin="4,4,4,0">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <BoxView x:Name="StrengthBar1" HeightRequest="6" WidthRequest="40" Color="#e0e3e5" CornerRadius="3"/>
+                                <BoxView x:Name="StrengthBar2" HeightRequest="6" WidthRequest="40" Color="#e0e3e5" CornerRadius="3"/>
+                                <BoxView x:Name="StrengthBar3" HeightRequest="6" WidthRequest="40" Color="#e0e3e5" CornerRadius="3"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label x:Name="StrengthIcon" Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#64748b"/>
+                                <Label x:Name="StrengthLabel" Text="Enter password" FontSize="10" FontAttributes="Bold" TextColor="#64748b"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+
+                    <!-- Confirm Password -->
+                    <VerticalStackLayout Spacing="4" Margin="0,8,0,0">
+                        <Label Text="Confirm Password" FontSize="12" FontAttributes="Bold" TextColor="#475569" Margin="4,0,0,0"/>
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52">
+                            <Border.Shadow>
+                                <Shadow Brush="#111827" Offset="0,2" Opacity="0.05" Radius="8"/>
+                            </Border.Shadow>
+                            <Grid ColumnDefinitions="48, *">
+                                <Label Grid.Column="0" Text="&#xeade;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                <Entry x:Name="PasswordRepeatEntry" Grid.Column="1" IsPassword="True" Placeholder="Re-enter your password" PlaceholderColor="#cbd5e1" TextColor="#191c1e" BackgroundColor="Transparent" VerticalOptions="Center" Margin="0,0,16,0"/>
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Terms Agreement -->
+                    <HorizontalStackLayout Spacing="12" Margin="0,8,0,0">
+                        <HorizontalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTermsTapped"/>
+                        </HorizontalStackLayout.GestureRecognizers>
+                        <Border x:Name="TermsCheckbox" WidthRequest="20" HeightRequest="20" BackgroundColor="#e0e3e5" StrokeThickness="0" StrokeShape="RoundRectangle 6" VerticalOptions="Start" Margin="0,4,0,0">
+                            <Label x:Name="TermsCheckIcon" Text="&#xe5ca;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" Opacity="0"/>
+                        </Border>
+                        <Label FontSize="12" TextColor="#475569" LineBreakMode="WordWrap">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="I have read and agree to the " />
+                                    <Span Text="Terms of Service" FontAttributes="Bold" TextColor="#191c1e" TextDecorations="Underline"/>
+                                    <Span Text=" and " />
+                                    <Span Text="Privacy Policy" FontAttributes="Bold" TextColor="#191c1e" TextDecorations="Underline"/>
+                                    <Span Text="." />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </HorizontalStackLayout>
+
+                    <!-- Register Button -->
+                    <Border BackgroundColor="#f97316" StrokeThickness="0" StrokeShape="RoundRectangle 12" HeightRequest="52" Margin="0,8,0,0">
+                        <Border.Shadow>
+                            <Shadow Brush="#f97316" Offset="0,8" Opacity="0.25" Radius="20"/>
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnRegisterSubmitTapped"/>
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout Spacing="8" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label Text="Sign Up" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center"/>
+                            <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#ffffff" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Login Redirect -->
+                <HorizontalStackLayout Spacing="4" HorizontalOptions="Center" Margin="0,8,0,0">
+                    <Label Text="Already have an account?" FontSize="14" TextColor="#475569" VerticalOptions="Center"/>
+                    <Label Text="Sign In" FontSize="14" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnLoginLinkTapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

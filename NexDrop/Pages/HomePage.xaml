@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:QuickDrop.Helpers"
+             x:Class="QuickDrop.Pages.HomePage"
+             Title="Home"
+             BackgroundColor="#f8fafc"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False"
+             x:Name="HomePageRoot">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- MODERN SAAS PRODUCT CARD TEMPLATE -->
+            <DataTemplate x:Key="ProductCardTemplate">
+                <Border BackgroundColor="#ffffff" WidthRequest="168" StrokeShape="RoundRectangle 18" StrokeThickness="1" Stroke="#f1f5f9" Padding="12" Margin="0,0,0,14">
+                    <Border.Shadow>
+                        <Shadow Brush="#0f172a" Opacity="0.04" Offset="0,4" Radius="14"/>
+                    </Border.Shadow>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.GoToProductDetailCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                    </Border.GestureRecognizers>
+
+                    <Grid RowDefinitions="Auto, *" RowSpacing="10">
+
+                        <!-- Product Thumbnail Box -->
+                        <Border Grid.Row="0" BackgroundColor="#f8fafc" StrokeShape="RoundRectangle 14" StrokeThickness="0" HeightRequest="135">
+                            <Grid>
+                                <Image Source="{Binding MainImage}" Aspect="AspectFit" Margin="8"/>
+
+                                <!-- Discount Badge -->
+                                <Border IsVisible="{Binding HasDiscount}" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 6" StrokeThickness="0" Padding="6,2" HorizontalOptions="Start" VerticalOptions="Start" Margin="8">
+                                    <Label Text="{Binding FormattedDiscount}" FontSize="10" FontAttributes="Bold" TextColor="#ffffff"/>
+                                </Border>
+
+                                <!-- Favorite Button -->
+                                <Border WidthRequest="32" HeightRequest="32" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="8">
+                                    <Border.Shadow>
+                                        <Shadow Brush="#0f172a" Opacity="0.08" Offset="0,2" Radius="6"/>
+                                    </Border.Shadow>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding BindingContext.ToggleFavoriteCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
+                                    <Label FontSize="16" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label.Style>
+                                            <Style TargetType="Label">
+                                                <Setter Property="Text" Value="&#xe87e;"/>
+                                                <Setter Property="FontFamily" Value="MaterialSymbolsOutlined-Regular"/>
+                                                <Setter Property="TextColor" Value="#94a3b8"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="True">
+                                                        <Setter Property="Text" Value="&#x2665;"/>
+                                                        <Setter Property="FontFamily" Value=""/>
+                                                        <Setter Property="TextColor" Value="#ea580c"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Label.Style>
+                                    </Label>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Product Details & Actions -->
+                        <Grid Grid.Row="1" RowDefinitions="Auto, *, Auto">
+                            <VerticalStackLayout Grid.Row="0" Spacing="2">
+                                <Label Text="{Binding Brand}" FontSize="10" FontAttributes="Bold" TextColor="#64748b" TextTransform="Uppercase" CharacterSpacing="1"/>
+                                <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold" TextColor="#0f172a" LineBreakMode="TailTruncation" MaxLines="2"/>
+                                <Label Text="{Binding Unit}" FontSize="10" TextColor="#64748b" Margin="0,1,0,0" IsVisible="{Binding Unit, Converter={StaticResource StringIsNullOrEmptyConverter}}"/>
+                            </VerticalStackLayout>
+
+                            <Grid Grid.Row="2" ColumnDefinitions="*, Auto" VerticalOptions="End" Margin="0,8,0,0">
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="End" Spacing="-1">
+                                    <Grid IsVisible="{Binding HasDiscount}" HorizontalOptions="Start" VerticalOptions="Center">
+                                        <Label Text="{Binding FormattedOldPrice}" FontSize="11" TextColor="#94a3b8" LineBreakMode="NoWrap"/>
+                                        <BoxView HeightRequest="1" Color="#94a3b8" HorizontalOptions="Fill" VerticalOptions="Center"/>
+                                    </Grid>
+                                    <Label Text="{Binding FormattedPrice}" FontSize="15" FontAttributes="Bold" TextColor="#0f172a" LineBreakMode="NoWrap"/>
+                                </VerticalStackLayout>
+
+                                <!-- Stepper / Add Button -->
+                                <Grid Grid.Column="1" VerticalOptions="End" HorizontalOptions="End">
+                                    <!-- Add button when not in cart -->
+                                    <Border WidthRequest="34" HeightRequest="34" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="End" HorizontalOptions="End" IsVisible="{Binding IsNotInCart}">
+                                        <Border.Shadow>
+                                            <Shadow Brush="#ea580c" Offset="0,3" Opacity="0.25" Radius="6"/>
+                                        </Border.Shadow>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.AddToCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+                                        <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+
+                                    <!-- Stepper capsule when in cart -->
+                                    <Border BackgroundColor="#ea580c" HeightRequest="34" StrokeShape="RoundRectangle 17" StrokeThickness="0" VerticalOptions="End" HorizontalOptions="End" IsVisible="{Binding IsInCart}">
+                                        <Border.Shadow>
+                                            <Shadow Brush="#ea580c" Offset="0,3" Opacity="0.25" Radius="6"/>
+                                        </Border.Shadow>
+                                        <HorizontalStackLayout Spacing="8" Padding="8,0" VerticalOptions="Center">
+                                            <Label Text="&#xe15b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.DecreaseCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                            <Label Text="{Binding CartQuantity}" FontSize="13" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center" Margin="2,0"/>
+                                            <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" VerticalOptions="Center">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BindingContext.AddToCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- 1. MODERN HEADER -->
+        <Border Grid.Row="0" BackgroundColor="#ffffff" StrokeThickness="1" Stroke="#f1f5f9" Padding="16,12" ZIndex="10">
+            <Border.Shadow>
+                <Shadow Brush="#0f172a" Offset="0,2" Opacity="0.03" Radius="8"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                <!-- Logo -->
+                <Image Grid.Column="0" Source="logo.png" HeightRequest="22" WidthRequest="70" Aspect="AspectFit" VerticalOptions="Center" />
+
+                <!-- Location / Address Chip -->
+                <Border Grid.Column="1" BackgroundColor="#f8fafc" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#e2e8f0" Padding="10,6" VerticalOptions="Center">
+                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="6" VerticalOptions="Center">
+                        <Label Grid.Column="0" Text="&#xe55f;" FontFamily="MaterialSymbolsOutlined-Regular" TextColor="#ea580c" FontSize="18" VerticalOptions="Center"/>
+                        <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                            <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                <BoxView WidthRequest="6" HeightRequest="6" Color="#10b981" CornerRadius="3" VerticalOptions="Center"/>
+                                <Label Text="EXPRESS DELIVERY (10-15m)" FontSize="8" FontAttributes="Bold" TextColor="#10b981" CharacterSpacing="0.5"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Spacing="3" VerticalOptions="Center">
+                                <Label Text="{Binding ActiveAddressText}" FontSize="12" FontAttributes="Bold" TextColor="#0f172a" LineBreakMode="TailTruncation" MaxLines="1"/>
+                                <Label Text="⌄" FontSize="12" FontAttributes="Bold" TextColor="#64748b" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- Notifications & Profile Avatar -->
+                <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+                    <Grid WidthRequest="36" HeightRequest="36" VerticalOptions="Center">
+                        <Border BackgroundColor="#f8fafc" StrokeShape="RoundRectangle 18" StrokeThickness="1" Stroke="#e2e8f0" WidthRequest="36" HeightRequest="36">
+                            <Label Text="&#xe7f4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#0f172a" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                        <Border BackgroundColor="#ea580c" WidthRequest="8" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,4,4,0"/>
+                    </Grid>
+
+                    <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="1" Stroke="#e2e8f0" BackgroundColor="#f1f5f9" VerticalOptions="Center">
+                        <Image Source="{Binding UserProfileImage}" Aspect="AspectFill" WidthRequest="36" HeightRequest="36" />
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- 2. SCROLLABLE BODY & STICKY CART -->
+        <Grid Grid.Row="1">
+
+            <ScrollView Padding="0,16,0,90">
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- SAAS SEARCH BAR -->
+                    <Border BackgroundColor="#ffffff" Margin="16,0" HeightRequest="48" StrokeShape="RoundRectangle 14" StrokeThickness="1" Stroke="#e2e8f0">
+                        <Border.Shadow>
+                            <Shadow Brush="#0f172a" Offset="0,2" Opacity="0.03" Radius="8"/>
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSearchBoxTapped"/>
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto, *, Auto, Auto" Padding="14,0" ColumnSpacing="10" VerticalOptions="Center">
+                            <Label Grid.Column="0" Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" VerticalOptions="Center"/>
+                            <Label Grid.Column="1" Text="Search products, brands, or essentials..." FontSize="13" TextColor="#64748b" VerticalOptions="Center"/>
+                            <Border Grid.Column="2" BackgroundColor="#f1f5f9" StrokeShape="RoundRectangle 6" StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
+                                <Label Text="⌘K" FontSize="10" FontAttributes="Bold" TextColor="#64748b"/>
+                            </Border>
+                            <Label Grid.Column="3" Text="&#xe3b0;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#64748b" VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- LIVE STATUS BANNER -->
+                    <Border BackgroundColor="#fff7ed" Margin="16,0" HeightRequest="40" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#ffedd5">
+                        <Grid ColumnDefinitions="Auto, *, Auto" Padding="12,0" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <Label Text="⚡" FontSize="14" VerticalOptions="Center"/>
+                                <Label Text="At your door in 10-15 mins" FontSize="12" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout Grid.Column="2" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Free delivery over $200" FontSize="11" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center"/>
+                                <Label Text="→" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <!-- CAMPAIGN CAROUSEL -->
+                    <CollectionView ItemsSource="{Binding Campaigns}" HeightRequest="165" Margin="0,0">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0" SnapPointsType="MandatorySingle" SnapPointsAlignment="Center"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentView Padding="16,0,0,0">
+                                    <Border WidthRequest="340" BackgroundColor="#e2e8f0" StrokeShape="RoundRectangle 20" StrokeThickness="0">
+                                        <Border.Shadow>
+                                            <Shadow Brush="#0f172a" Offset="0,4" Opacity="0.08" Radius="12"/>
+                                        </Border.Shadow>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnCampaignBannerTapped"/>
+                                        </Border.GestureRecognizers>
+                                        <Grid>
+                                            <Image Source="{Binding ImageUrl}" Aspect="AspectFill" />
+                                        </Grid>
+                                    </Border>
+                                </ContentView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <!-- CATEGORIES SECTION -->
+                    <VerticalStackLayout Spacing="12" Margin="0,4,0,0">
+                        <Grid Padding="16,0">
+                            <Label Text="Shop by Category" FontSize="18" FontAttributes="Bold" TextColor="#0f172a" HorizontalOptions="Start" VerticalOptions="Center" />
+                            <Label Text="View All →" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" HorizontalOptions="End" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNavCategoriesTapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <CollectionView ItemsSource="{Binding Categories}" HeightRequest="120">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="14" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.Margin>
+                                <OnPlatform x:TypeArguments="Thickness">
+                                    <On Platform="Android,iOS,WinUI" Value="16,4,16,10" />
+                                </OnPlatform>
+                            </CollectionView.Margin>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <VerticalStackLayout Spacing="8" HorizontalOptions="Center" WidthRequest="84">
+                                        <Border WidthRequest="80" HeightRequest="80" StrokeShape="RoundRectangle 20" StrokeThickness="1" Stroke="#f1f5f9" BackgroundColor="#ffffff">
+                                            <Border.Shadow>
+                                                <Shadow Brush="#0f172a" Offset="0,3" Opacity="0.04" Radius="8"/>
+                                            </Border.Shadow>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding BindingContext.GoToCategoryCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                            </Border.GestureRecognizers>
+
+                                            <Image Source="{Binding Image}" Aspect="AspectFill" />
+                                        </Border>
+
+                                        <Label Text="{Binding Name}" FontSize="12" FontAttributes="Bold" TextColor="#0f172a" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation" MaxLines="1" />
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- FLASH DEALS SECTION -->
+                    <VerticalStackLayout Spacing="12" Margin="0,6,0,0">
+                        <Grid Padding="16,0">
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Label Text="&#xe3e7;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="22" TextColor="#ea580c" VerticalOptions="Center"/>
+                                <Label Text="Flash Deals" FontSize="18" FontAttributes="Bold" TextColor="#0f172a" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            
+                            <!-- Timer Badge -->
+                            <Border HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="#fef2f2" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#fee2e2" Padding="8,4">
+                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                    <Label Text="&#xe425;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="15" TextColor="#dc2626" VerticalOptions="Center"/>
+                                    <Label Text="{Binding CountdownText}" FontSize="12" FontAttributes="Bold" TextColor="#dc2626" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <CollectionView ItemsSource="{Binding FlashDeals}" HeightRequest="295" Margin="-16,0">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout Orientation="Horizontal" ItemSpacing="0" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentView Padding="16,8,0,16">
+                                        <Border WidthRequest="168" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 18" StrokeThickness="1" Stroke="#f1f5f9" Padding="12">
+                                            <Border.Shadow>
+                                                <Shadow Brush="#0f172a" Offset="0,4" Opacity="0.05" Radius="14" />
+                                            </Border.Shadow>
+                                            <Grid RowDefinitions="Auto, *" RowSpacing="10">
+
+                                                <!-- Image Box -->
+                                                <Border Grid.Row="0" BackgroundColor="#f8fafc" StrokeShape="RoundRectangle 14" StrokeThickness="0" HeightRequest="135">
+                                                    <Grid>
+                                                        <Image Source="{Binding ImageUrl}" Aspect="AspectFit" Margin="8" />
+
+                                                        <Border IsVisible="{Binding HasDiscount}" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 6" StrokeThickness="0" Padding="6,2" HorizontalOptions="Start" VerticalOptions="Start" Margin="8">
+                                                            <Label Text="{Binding DiscountPercent, StringFormat='-%{0}'}" FontSize="10" FontAttributes="Bold" TextColor="#ffffff"/>
+                                                        </Border>
+
+                                                        <Border WidthRequest="32" HeightRequest="32" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="8">
+                                                            <Border.Shadow>
+                                                                <Shadow Brush="#0f172a" Opacity="0.08" Offset="0,2" Radius="6"/>
+                                                            </Border.Shadow>
+                                                            <Border.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding BindingContext.ToggleFavoriteCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                            </Border.GestureRecognizers>
+                                                            <Label FontSize="16" HorizontalOptions="Center" VerticalOptions="Center">
+                                                                <Label.Style>
+                                                                    <Style TargetType="Label">
+                                                                        <Setter Property="Text" Value="&#xe87e;"/>
+                                                                        <Setter Property="FontFamily" Value="MaterialSymbolsOutlined-Regular"/>
+                                                                        <Setter Property="TextColor" Value="#94a3b8"/>
+                                                                        <Style.Triggers>
+                                                                            <DataTrigger TargetType="Label" Binding="{Binding IsFavorite}" Value="True">
+                                                                                <Setter Property="Text" Value="&#x2665;"/>
+                                                                                <Setter Property="FontFamily" Value=""/>
+                                                                                <Setter Property="TextColor" Value="#ea580c"/>
+                                                                            </DataTrigger>
+                                                                        </Style.Triggers>
+                                                                    </Style>
+                                                                </Label.Style>
+                                                            </Label>
+                                                        </Border>
+                                                    </Grid>
+                                                </Border>
+
+                                                <!-- Info & Action -->
+                                                <Grid Grid.Row="1" RowDefinitions="Auto, *, Auto">
+                                                    <VerticalStackLayout Grid.Row="0" Spacing="2">
+                                                        <Label Text="{Binding Brand}" FontSize="10" FontAttributes="Bold" TextColor="#64748b" TextTransform="Uppercase" CharacterSpacing="1"/>
+                                                        <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold" TextColor="#0f172a" LineBreakMode="TailTruncation" MaxLines="2"/>
+                                                    </VerticalStackLayout>
+
+                                                    <Grid Grid.Row="2" ColumnDefinitions="*, Auto" VerticalOptions="End" Margin="0,8,0,0">
+                                                        <VerticalStackLayout Grid.Column="0" VerticalOptions="Center" Spacing="-1">
+                                                            <Grid IsVisible="{Binding HasDiscount}" HorizontalOptions="Start" VerticalOptions="Center">
+                                                                <Label Text="{Binding OldPrice, StringFormat='${0:N2}'}" FontSize="11" TextColor="#94a3b8" LineBreakMode="NoWrap" />
+                                                                <BoxView HeightRequest="1" Color="#94a3b8" HorizontalOptions="Fill" VerticalOptions="Center"/>
+                                                            </Grid>
+                                                            <Label Text="{Binding Price, StringFormat='${0:N2}'}" FontSize="15" FontAttributes="Bold" TextColor="#0f172a" LineBreakMode="NoWrap"/>
+                                                        </VerticalStackLayout>
+
+                                                        <Grid Grid.Column="1" VerticalOptions="End" HorizontalOptions="End">
+                                                            <Border WidthRequest="34" HeightRequest="34" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 12" StrokeThickness="0" VerticalOptions="End" HorizontalOptions="End" IsVisible="{Binding IsNotInCart}">
+                                                                <Border.Shadow>
+                                                                    <Shadow Brush="#ea580c" Offset="0,3" Opacity="0.25" Radius="6"/>
+                                                                </Border.Shadow>
+                                                                <Border.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding BindingContext.AddFlashDealToCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                                </Border.GestureRecognizers>
+                                                                <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                            </Border>
+
+                                                            <Border BackgroundColor="#ea580c" HeightRequest="34" StrokeShape="RoundRectangle 17" StrokeThickness="0" VerticalOptions="End" HorizontalOptions="End" IsVisible="{Binding IsInCart}">
+                                                                <Border.Shadow>
+                                                                    <Shadow Brush="#ea580c" Offset="0,3" Opacity="0.25" Radius="6"/>
+                                                                </Border.Shadow>
+                                                                <HorizontalStackLayout Spacing="8" Padding="8,0" VerticalOptions="Center">
+                                                                    <Label Text="&#xe15b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" VerticalOptions="Center">
+                                                                        <Label.GestureRecognizers>
+                                                                            <TapGestureRecognizer Command="{Binding BindingContext.DecreaseFlashDealCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                                        </Label.GestureRecognizers>
+                                                                    </Label>
+                                                                    <Label Text="{Binding CartQuantity}" FontSize="13" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center" Margin="2,0"/>
+                                                                    <Label Text="&#xe145;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" VerticalOptions="Center">
+                                                                        <Label.GestureRecognizers>
+                                                                            <TapGestureRecognizer Command="{Binding BindingContext.AddFlashDealToCartCommand, Source={x:Reference HomePageRoot}}" CommandParameter="{Binding .}"/>
+                                                                        </Label.GestureRecognizers>
+                                                                    </Label>
+                                                                </HorizontalStackLayout>
+                                                            </Border>
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
+                                        </Border>
+                                    </ContentView>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- POPULAR PRODUCTS SECTION -->
+                    <VerticalStackLayout Spacing="14" Margin="16,10,16,0">
+                        <Grid>
+                            <Label Text="Popular Products" FontSize="18" FontAttributes="Bold" TextColor="#0f172a" HorizontalOptions="Start" />
+                            <Label Text="Explore All →" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" HorizontalOptions="End" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNavProductsTapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <FlexLayout x:Name="PopularProductsLayout" Wrap="Wrap" JustifyContent="SpaceBetween" BindableLayout.ItemsSource="{Binding PopularProducts}" BindableLayout.ItemTemplate="{StaticResource ProductCardTemplate}">
+                        </FlexLayout>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- FLOATING STICKY CART BAR -->
+            <Border BackgroundColor="#ea580c" HeightRequest="58" Margin="16,0,16,16" StrokeShape="RoundRectangle 29" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#ea580c" Offset="0,6" Opacity="0.35" Radius="16" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Fill" Padding="8,0,8,0">
+
+                    <Border Grid.Column="0" BackgroundColor="#ffffff" WidthRequest="44" HeightRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0" VerticalOptions="Center">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="16" FontAttributes="Bold" TextColor="#ea580c" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0">
+                        <Label Text="Cart Total" FontSize="10" TextColor="#fed7aa"/>
+                        <Label Text="{Binding TotalCartText}" FontSize="17" FontAttributes="Bold" TextColor="#ffffff" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="2" BackgroundColor="#ffffff" HeightRequest="40" Padding="16,0" StrokeShape="RoundRectangle 20" StrokeThickness="0" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                            <Label Text="View Cart" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" />
+                            <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!-- 3. MODERN BOTTOM NAVBAR -->
+        <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="64" StrokeThickness="1" Stroke="#f1f5f9">
+            <Border.Shadow>
+                <Shadow Brush="#0f172a" Opacity="0.04" Offset="0,-3" Radius="10"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="*,*,*,*,*" Padding="0,6">
+                <!-- Home (Active) -->
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#ea580c" HorizontalOptions="Center"/>
+                    <Label Text="Home" FontSize="10" FontAttributes="Bold" TextColor="#ea580c" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Categories -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavCategoriesTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748b" HorizontalOptions="Center"/>
+                    <Label Text="Categories" FontSize="10" TextColor="#64748b" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Cart -->
+                <Grid Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                        <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748b" HorizontalOptions="Center"/>
+                        <Label Text="Cart" FontSize="10" TextColor="#64748b" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Border BackgroundColor="#ea580c" WidthRequest="18" HeightRequest="18" StrokeShape="RoundRectangle 9" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-10,0" IsVisible="{Binding HasCartItems}">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="9" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+
+                <!-- Orders -->
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavOrdersTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748b" HorizontalOptions="Center"/>
+                    <Label Text="Orders" FontSize="10" TextColor="#64748b" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Profile -->
+                <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavProfileTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748b" HorizontalOptions="Center"/>
+                    <Label Text="Profile" FontSize="10" TextColor="#64748b" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- FLOATING AI ASSISTANT ACTION BUTTON (FAB) -->
+        <Grid Grid.Row="1" WidthRequest="56" HeightRequest="56" HorizontalOptions="End" VerticalOptions="End" Margin="0,0,16,74" ZIndex="20">
+            <Grid.Shadow>
+                <Shadow Brush="#ea580c" Offset="0,4" Opacity="0.30" Radius="12"/>
+            </Grid.Shadow>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnNavAiAssistantTapped"/>
+            </Grid.GestureRecognizers>
+
+            <Image Source="bot_icon.png" Aspect="AspectFill" />
+
+            <Border BackgroundColor="#ffffff" WidthRequest="16" HeightRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-2,-2,0">
+                <BoxView x:Name="AiOnlinePulse" Color="#10b981" WidthRequest="10" HeightRequest="10" CornerRadius="5" HorizontalOptions="Center" VerticalOptions="Center" Loaded="OnAiPulseLoaded"/>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

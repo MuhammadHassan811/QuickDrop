@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuickDrop.Pages.SplashPage"
+             BackgroundColor="#f7f9fb"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <!-- Background Ambient Gradient Glows -->
+        <Ellipse WidthRequest="320" HeightRequest="320" Fill="#f97316" Opacity="0.06" HorizontalOptions="Start" VerticalOptions="Start" TranslationX="-80" TranslationY="-80" />
+        <Ellipse WidthRequest="350" HeightRequest="350" Fill="#f97316" Opacity="0.04" HorizontalOptions="End" VerticalOptions="End" TranslationX="100" TranslationY="100" />
+
+        <ScrollView>
+            <Grid RowDefinitions="Auto, *, Auto" Padding="24,40,24,32" MinimumHeightRequest="750">
+
+                <!-- 1. TOP STATUS BAR (Express Badge & Delivery Time) -->
+                <Grid Grid.Row="0" ColumnDefinitions="Auto, *, Auto" VerticalOptions="Start">
+                    <!-- Express Hub Badge -->
+                    <Border Grid.Column="0" BackgroundColor="#ffffff" Stroke="#e0e3e5" StrokeThickness="1" StrokeShape="RoundRectangle 20" Padding="12,6">
+                        <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                            <Ellipse x:Name="ExpressHubDot" WidthRequest="8" HeightRequest="8" Fill="#f97316" VerticalOptions="Center"/>
+                            <Label Text="FAST DELIVERY" FontSize="11" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" CharacterSpacing="1"/>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Delivery Duration -->
+                    <HorizontalStackLayout Grid.Column="2" Spacing="4" VerticalOptions="Center">
+                        <Label Text="&#xea0b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#ea580c" VerticalOptions="Center"/>
+                        <Label Text="10-15 mins" FontSize="13" FontAttributes="Bold" TextColor="#475569" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Grid>
+
+                <!-- 2. CENTER (Logo, Texts, Badges) -->
+                <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" HorizontalOptions="Center" Spacing="28">
+
+                    <!-- Logo Box -->
+                    <Grid WidthRequest="150" HeightRequest="150" HorizontalOptions="Center">
+                        <Border BackgroundColor="#ffffff" StrokeThickness="0" StrokeShape="RoundRectangle 36" Padding="20">
+                            <Border.Shadow>
+                                <Shadow Brush="#f97316" Offset="0,12" Opacity="0.25" Radius="30" />
+                            </Border.Shadow>
+                            <Image Source="logosplash.png" Aspect="AspectFit" />
+                        </Border>
+                        <!-- Dynamic Badge -->
+                        <Border WidthRequest="36" HeightRequest="36" BackgroundColor="#f97316" Stroke="#ffffff" StrokeThickness="3" StrokeShape="RoundRectangle 18" HorizontalOptions="End" VerticalOptions="End" TranslationX="6" TranslationY="6">
+                            <Label Text="&#xe3e7;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Brand Title -->
+                    <VerticalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="0">
+                            <Label Text="Quick" FontSize="42" FontAttributes="Bold" TextColor="#111827"/>
+                            <Label Text="Drop" FontSize="42" FontAttributes="Bold" TextColor="#f97316"/>
+                        </HorizontalStackLayout>
+                        <Label Text="Fast   Fresh   At Your Door" FontSize="15" FontAttributes="Bold" TextColor="#575e70" HorizontalOptions="Center" CharacterSpacing="1.5"/>
+                    </VerticalStackLayout>
+
+                    <!-- INFO PILLS -->
+                    <HorizontalStackLayout Spacing="8" HorizontalOptions="Center" Margin="0,8,0,0">
+                        <!-- Natural -->
+                        <Border BackgroundColor="#f2f4f6" Stroke="#e0e3e5" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="12,6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="&#xe894;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="15" TextColor="#f97316" VerticalOptions="Center"/>
+                                <Label Text="Natural" FontSize="11" FontAttributes="Bold" TextColor="#475569" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                        <!-- Zero Emission -->
+                        <Border BackgroundColor="#f2f4f6" Stroke="#e0e3e5" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="12,6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="&#xeb13;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="15" TextColor="#f97316" VerticalOptions="Center"/>
+                                <Label Text="Zero Emission" FontSize="11" FontAttributes="Bold" TextColor="#475569" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                        <!-- 1000+ Products -->
+                        <Border BackgroundColor="#f2f4f6" Stroke="#e0e3e5" StrokeThickness="1" StrokeShape="RoundRectangle 16" Padding="12,6">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="15" TextColor="#f97316" VerticalOptions="Center"/>
+                                <Label Text="1000+ Products" FontSize="11" FontAttributes="Bold" TextColor="#475569" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- 3. BOTTOM LOADING BAR -->
+                <VerticalStackLayout Grid.Row="2" Spacing="16" MaximumWidthRequest="340" WidthRequest="320" HorizontalOptions="Center" VerticalOptions="End">
+                    <VerticalStackLayout Spacing="6">
+
+                        <!-- Progress Info -->
+                        <Grid ColumnDefinitions="*, Auto" Margin="4,0,4,0">
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Ellipse WidthRequest="6" HeightRequest="6" Fill="#fb923c" VerticalOptions="Center" />
+                                <Label x:Name="StatusTitleLabel" Text="Synchronizing catalog and warehouses" FontSize="11" FontAttributes="Bold" TextColor="#575e70" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label x:Name="ProgressPercentageLabel" Grid.Column="1" Text="0%" FontSize="12" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Custom Progress Bar -->
+                        <Border BackgroundColor="#e0e3e5" StrokeThickness="0" StrokeShape="RoundRectangle 4" HeightRequest="6">
+                            <Border x:Name="CustomProgressBar" 
+                                    BackgroundColor="#f97316" 
+                                    StrokeThickness="0" 
+                                    StrokeShape="RoundRectangle 4" 
+                                    HorizontalOptions="Start" 
+                                    WidthRequest="0" />
+                        </Border>
+
+                        <!-- Sub Status -->
+                        <Label x:Name="StatusLabel" Text="Preparing..." FontSize="12" TextColor="#575e70" HorizontalOptions="Center" Margin="0,4,0,0" />
+                    </VerticalStackLayout>
+
+                    <!-- Engine Badge -->
+                    <Border BackgroundColor="#f2f4f6" StrokeThickness="0" StrokeShape="RoundRectangle 16" Padding="14,8" HorizontalOptions="Center" Margin="0,8,0,0">
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="&#xeb8e;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#64748b" VerticalOptions="Center" />
+                            <Label Text="v1.4.2 " FontSize="10" FontAttributes="Bold" TextColor="#64748b" VerticalOptions="Center" CharacterSpacing="1" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

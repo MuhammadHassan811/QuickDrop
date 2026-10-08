@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:shapes="clr-namespace:Microsoft.Maui.Controls.Shapes;assembly=Microsoft.Maui.Controls"
+             x:Class="QuickDrop.Pages.WheelPage"
+             Title="Spin &amp; Win"
+             BackgroundColor="#f7f9fb"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid>
+        <Grid RowDefinitions="Auto, *, Auto">
+
+            <!-- 1. HEADER -->
+            <Grid Grid.Row="0" HeightRequest="60" Padding="16,0" BackgroundColor="#ffffff" VerticalOptions="Start" ZIndex="10" HorizontalOptions="Fill">
+                <Grid.Shadow>
+                    <Shadow Brush="#000000" Opacity="0.04" Offset="0,1" Radius="8"/>
+                </Grid.Shadow>
+                <Grid ColumnDefinitions="Auto, *, Auto" VerticalOptions="Center" HorizontalOptions="Fill">
+                    <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#f7f9fb" StrokeShape="RoundRectangle 20" StrokeThickness="0" VerticalOptions="Center" Margin="-6,0,0,0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnBackTapped"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe5c4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#191c1e" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <Label Grid.Column="1" Text="Spin &amp; Win" FontSize="20" FontAttributes="Bold" TextColor="#191c1e" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    <BoxView Grid.Column="2" WidthRequest="40" Color="Transparent" />
+                </Grid>
+            </Grid>
+
+            <!-- 2. MAIN SCROLLABLE CONTENT -->
+            <ScrollView Grid.Row="1" Padding="0,0,0,24">
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Fill">
+
+                    <!-- LIVE NOTIFICATION -->
+                    <Border BackgroundColor="#d9dff5" StrokeThickness="0" Padding="16,8" Margin="16,16,16,0" StrokeShape="RoundRectangle 12">
+                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="8" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="4" VerticalOptions="Center">
+                                <BoxView WidthRequest="8" HeightRequest="8" CornerRadius="4" Color="#b81d27" VerticalOptions="Center"/>
+                                <Label Text="LIVE" FontSize="10" FontAttributes="Bold" TextColor="#b81d27" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <ScrollView Grid.Column="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" VerticalOptions="Center">
+                                <Label Text="🔥 Sarah M. won a $100 discount • 2 mins ago" FontSize="12" TextColor="#141b2b" VerticalOptions="Center" LineBreakMode="NoWrap"/>
+                            </ScrollView>
+                            <Label Grid.Column="2" Text="&#xea0b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#575e70" VerticalOptions="Center"/>
+                        </Grid>
+                    </Border>
+
+                    <!-- CAMPAIGN TITLE & SPINS -->
+                    <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="20" Margin="16,16,16,0" HorizontalOptions="Fill">
+                        <Border.Shadow>
+                            <Shadow Brush="#000000" Opacity="0.05" Offset="0,4" Radius="16"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="16">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="Catch Today's Luck! 🎉" FontSize="22" FontAttributes="Bold" TextColor="#191c1e"/>
+                                <Label Text="Spin the wheel to win discounts up to $100 or free items instantly." FontSize="14" TextColor="#575e70" LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+
+                            <Border BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16,12">
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                    <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#f97316" StrokeShape="RoundRectangle 20" StrokeThickness="0">
+                                        <Label x:Name="SpinCountText" Text="1" FontSize="18" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                        <Label Text="SPINS LEFT" FontSize="10" TextColor="#ea580c" FontAttributes="Bold"/>
+                                        <Label x:Name="RemainText" Text="1 Spin Available" FontSize="16" FontAttributes="Bold" TextColor="#431407"/>
+                                    </VerticalStackLayout>
+                                    <Border Grid.Column="2" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="8,4" VerticalOptions="Center">
+                                        <Label Text="+1 Spin on $150" FontSize="10" FontAttributes="Bold" TextColor="#f97316"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- WHEEL SCREEN -->
+                    <Grid WidthRequest="260" HeightRequest="260" HorizontalOptions="Center" VerticalOptions="Center" Margin="16,24,16,16">
+
+                        <!-- Wheel Outer Shadow -->
+                        <shapes:Ellipse WidthRequest="260" HeightRequest="260" Fill="#f97316" Opacity="0.1" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                        <!-- Rotating Wheel Geometry -->
+                        <Grid x:Name="WheelContainer" WidthRequest="260" HeightRequest="260" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Grid WidthRequest="260" HeightRequest="260" Padding="0" HorizontalOptions="Center" VerticalOptions="Center">
+
+                                <Grid.Clip>
+                                    <EllipseGeometry Center="130,130" RadiusX="130" RadiusY="130"/>
+                                </Grid.Clip>
+
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 130 0 A 130 130 0 0 1 221.92 38.08 Z" Fill="#f97316"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 221.92 38.08 A 130 130 0 0 1 260 130 Z" Fill="#fb923c"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 260 130 A 130 130 0 0 1 221.92 221.92 Z" Fill="#ff827c"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 221.92 221.92 A 130 130 0 0 1 130 260 Z" Fill="#ea580c"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 130 260 A 130 130 0 0 1 38.08 221.92 Z" Fill="#ffdad7"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 38.08 221.92 A 130 130 0 0 1 0 130 Z" Fill="#f97316"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 0 130 A 130 130 0 0 1 38.08 38.08 Z" Fill="#e0e3e5"/>
+                                <shapes:Path Aspect="None" WidthRequest="260" HeightRequest="260" HorizontalOptions="Start" VerticalOptions="Start" Data="M 130 130 L 38.08 38.08 A 130 130 0 0 1 130 0 Z" Fill="#7c2d12"/>
+
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="22.5">
+                                    <Label Text="$50 DISCOUNT" TextColor="#ffffff" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="67.5">
+                                    <Label Text="FREE DELIVERY" TextColor="#7c2d12" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="112.5">
+                                    <Label Text="20% DISCOUNT" TextColor="#7f0011" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="157.5">
+                                    <Label Text="$25 POINTS" TextColor="#ffffff" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="202.5">
+                                    <Label Text="FREE WAFER" TextColor="#410004" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="247.5">
+                                    <Label Text="$75 DISCOUNT" TextColor="#ffffff" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="292.5">
+                                    <Label Text="TRY AGAIN" TextColor="#475569" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                                <Grid WidthRequest="260" HeightRequest="260" Rotation="337.5">
+                                    <Label Text="SURPRISE BOX" TextColor="#fdba74" FontSize="9" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Start" Margin="0,44,0,0" Rotation="90"/>
+                                </Grid>
+                            </Grid>
+
+                            <shapes:Ellipse WidthRequest="260" HeightRequest="260" Stroke="#f97316" StrokeThickness="6" Fill="Transparent" InputTransparent="True" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <!-- POINTER -->
+                        <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Start" Margin="0,-14,0,0" ZIndex="20">
+                            <Border WidthRequest="24" HeightRequest="28" BackgroundColor="#b81d27" StrokeShape="RoundRectangle 12" StrokeThickness="0" Margin="0,0,0,-6">
+                                <shapes:Ellipse WidthRequest="8" HeightRequest="8" Fill="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <shapes:Polygon Points="0,0 24,0 12,18" Fill="#b81d27" HorizontalOptions="Center"/>
+                        </VerticalStackLayout>
+
+                        <!-- CENTER -->
+                        <Border WidthRequest="64" HeightRequest="64" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 32" StrokeThickness="0" HorizontalOptions="Center" VerticalOptions="Center" ZIndex="20" Padding="4">
+                            <Border.Shadow>
+                                <Shadow Brush="#000000" Opacity="0.15" Radius="12"/>
+                            </Border.Shadow>
+                            <Border BackgroundColor="#f97316" StrokeShape="RoundRectangle 30" StrokeThickness="0">
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="-4">
+                                    <Label Text="&#xea0b;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#ffffff" HorizontalOptions="Center"/>
+                                    <Label Text="QD" FontSize="9" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Border>
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="12" Margin="16,8,16,0" HorizontalOptions="Fill">
+                        <Button x:Name="SpinActionBtn" Text="SPIN &amp; WIN" BackgroundColor="#f97316" TextColor="#ffffff" CornerRadius="16" HeightRequest="56" FontAttributes="Bold" FontSize="16" Clicked="OnSpinTapped"/>
+                        <HorizontalStackLayout Spacing="6" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Label Text="&#xe8b5;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#575e70" VerticalOptions="Center"/>
+                            <Label Text="Next free spin:" FontSize="12" TextColor="#575e70" VerticalOptions="Center"/>
+                            <Label x:Name="TimerLabel" Text="04:18:22" FontSize="12" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+
+                    <!-- TODAY REWARDS -->
+                    <VerticalStackLayout Spacing="12" Margin="16,24,16,0">
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                            <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                                <Label Text="&#xe8f6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#ea580c" VerticalOptions="Center"/>
+                                <Label Text="My Rewards Today" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            <Label Grid.Column="1" Text="See All" FontSize="12" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center"/>
+                        </Grid>
+
+                        <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16">
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                    <Label Text="&#xe227;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#f97316" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <Label Text="$25 QuickPoints" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="Added to Account" FontSize="11" TextColor="#575e70"/>
+                                        <Label Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="12" TextColor="#ea580c"/>
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                                <Border Grid.Column="2" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="8,4" VerticalOptions="Center">
+                                    <Label Text="Auto" FontSize="10" TextColor="#575e70"/>
+                                 </Border>
+                             </Grid>
+                         </Border>
+
+                         <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16">
+                             <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                 <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                     <Label Text="&#xe558;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#f97316" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                 </Border>
+                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                     <Label Text="Free Delivery Coupon" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                     <Label Text="Selectable directly in cart" FontSize="11" TextColor="#575e70"/>
+                                 </VerticalStackLayout>
+                                 <Border Grid.Column="2" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="8,4" VerticalOptions="Center">
+                                     <Label Text="Active" FontSize="10" FontAttributes="Bold" TextColor="#f97316"/>
+                                 </Border>
+                             </Grid>
+                         </Border>
+                     </VerticalStackLayout>
+
+                     <!-- MORE SPINS TASKS -->
+                     <VerticalStackLayout Spacing="12" Margin="16,24,16,0">
+                         <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                             <VerticalStackLayout Grid.Column="0">
+                                 <Label Text="Spin More, Win More" FontSize="16" FontAttributes="Bold" TextColor="#191c1e"/>
+                                 <Label Text="Complete tasks to earn extra spins!" FontSize="12" TextColor="#575e70"/>
+                             </VerticalStackLayout>
+                             <Label Grid.Column="1" Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#f97316" VerticalOptions="Center"/>
+                         </Grid>
+
+                         <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16">
+                             <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                 <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                     <Label Text="&#xe8cc;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#575e70" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                 </Border>
+                                 <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                     <HorizontalStackLayout Spacing="6">
+                                         <Label Text="Order $150 or More" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                        <Border BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 4" StrokeThickness="0" Padding="4,2">
+                                            <Label Text="+1 Spin" FontSize="9" FontAttributes="Bold" TextColor="#f97316"/>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                    <Label Text="Valid for orders placed today" FontSize="11" TextColor="#575e70"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="2" Text="Start Shopping" BackgroundColor="#f97316" TextColor="#ffffff" CornerRadius="8" FontSize="11" FontAttributes="Bold" Padding="12,0" HeightRequest="32"/>
+                            </Grid>
+                        </Border>
+
+                        <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16">
+                            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                    <Label Text="&#xe7fe;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#575e70" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                </Border>
+                                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="6">
+                                        <Label Text="Invite a Friend" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                        <Border BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 4" StrokeThickness="0" Padding="4,2">
+                                            <Label Text="+1 Spin" FontSize="9" FontAttributes="Bold" TextColor="#f97316"/>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                    <Label Text="Free spin for both on their first order" FontSize="11" TextColor="#575e70"/>
+                                </VerticalStackLayout>
+                                <Border Grid.Column="2" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" VerticalOptions="Center">
+                                    <Label Text="Invite" FontSize="11" FontAttributes="Bold" TextColor="#575e70"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16">
+                            <VerticalStackLayout Spacing="12">
+                                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                                    <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 12" StrokeThickness="0">
+                                        <Label Text="&#xe8df;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#f97316" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="Log In 3 Days in a Row" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                            <Border BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 4" StrokeThickness="0" Padding="4,2">
+                                                <Label Text="+2 Spins" FontSize="9" FontAttributes="Bold" TextColor="#f97316"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
+                                        <Label Text="Logged in today (2/3 days completed)" FontSize="11" TextColor="#575e70"/>
+                                    </VerticalStackLayout>
+                                    <Label Grid.Column="2" Text="2/3 Days" FontSize="11" FontAttributes="Bold" TextColor="#f97316" VerticalOptions="Center"/>
+                                </Grid>
+                                <Border BackgroundColor="#f2f4f6" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0">
+                                    <Border BackgroundColor="#f97316" WidthRequest="180" HorizontalOptions="Start" StrokeShape="RoundRectangle 3" StrokeThickness="0"/>
+                                </Border>
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- CAMPAIGN RULES -->
+                    <Border BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16" Margin="16,24,16,16">
+                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12">
+                            <Label Grid.Column="0" Text="&#xe88e;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#575e70" VerticalOptions="Start"/>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Campaign Rules &amp; Details" FontSize="14" FontAttributes="Bold" TextColor="#191c1e"/>
+                                <Label Text="All won cart discounts and coupons are automatically applied at checkout or can be viewed in My Coupons. Each user gets 1 free spin per day. Extra spins depend on orders and invite rules." FontSize="12" TextColor="#575e70" LineBreakMode="WordWrap"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- 3. BOTTOM MENU -->
+            <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="60" StrokeThickness="0" StrokeShape="Rectangle">
+                <Border.Shadow>
+                    <Shadow Brush="#000000" Opacity="0.05" Offset="0,-2" Radius="8"/>
+                </Border.Shadow>
+                <Grid ColumnDefinitions="*,*,*,*,*,*" Padding="0,4" HorizontalOptions="Fill">
+                    <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Home" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Categories" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xeaa7;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#b81d27" HorizontalOptions="Center"/>
+                        <Label Text="Spin" FontSize="10" FontAttributes="Bold" TextColor="#b81d27" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Cart" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Orders" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="5" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <Label Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Profile" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- WIN MODAL -->
+        <Grid x:Name="RewardModal" BackgroundColor="#B3000000" IsVisible="False" ZIndex="100" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <Border x:Name="RewardCard" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 24" StrokeThickness="0" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="320" Padding="24" Scale="0.9">
+                <VerticalStackLayout Spacing="16" HorizontalOptions="Fill">
+
+                    <Border x:Name="RewardIconBorder" WidthRequest="80" HeightRequest="80" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 40" StrokeThickness="0" HorizontalOptions="Center">
+                        <Label x:Name="RewardIconText" Text="&#xe8f6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="40" TextColor="#f97316" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="CongratTitleText" Text="CONGRATULATIONS!" FontSize="12" FontAttributes="Bold" TextColor="#f97316" HorizontalOptions="Center" CharacterSpacing="1"/>
+                        <Label x:Name="RewardTitleText" Text="$50 Discount!" FontSize="24" FontAttributes="Bold" TextColor="#191c1e" HorizontalOptions="Center"/>
+                        <Label x:Name="RewardSubText" Text="Coupon has been added to your cart. Valid for 24 hours." FontSize="14" TextColor="#575e70" HorizontalTextAlignment="Center" LineBreakMode="WordWrap"/>
+                    </VerticalStackLayout>
+
+                    <Border x:Name="CouponCodeContainer" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="16,12" Margin="0,8,0,0">
+                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                            <VerticalStackLayout Grid.Column="0">
+                                <Label Text="Coupon Code" FontSize="10" TextColor="#575e70"/>
+                                <Label x:Name="RewardCodeText" Text="QUICKDROP50" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" FontFamily="Courier New"/>
+                            </VerticalStackLayout>
+                            <Border Grid.Column="1" BackgroundColor="#e0e3e5" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="12,8" VerticalOptions="Center">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCopyRewardTapped"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="Copy" FontSize="12" FontAttributes="Bold" TextColor="#191c1e"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+
+                    <VerticalStackLayout Spacing="8" Margin="0,8,0,0">
+                        <Button x:Name="ShopBtn" Text="Start Shopping Now" BackgroundColor="#f97316" TextColor="#ffffff" CornerRadius="12" HeightRequest="48" FontAttributes="Bold" FontSize="14" Clicked="OnCloseModalTapped"/>
+                        <Button Text="Close" BackgroundColor="Transparent" TextColor="#575e70" HeightRequest="40" FontAttributes="Bold" FontSize="14" Clicked="OnCloseModalTapped"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

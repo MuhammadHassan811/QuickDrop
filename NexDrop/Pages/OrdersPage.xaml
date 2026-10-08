@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuickDrop.Pages.OrdersPage"
+             Title="Orders"
+             BackgroundColor="#f7f9fb"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- 1. ÜST BİLGİ ÇUBUĞU (HEADER) -->
+        <Grid Grid.Row="0" HeightRequest="65" Padding="16,0" BackgroundColor="#ffffff" VerticalOptions="Start" ZIndex="10">
+            <Grid.Shadow>
+                <Shadow Brush="#000000" Opacity="0.04" Offset="0,1" Radius="8"/>
+            </Grid.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                <Image Grid.Column="0" Source="logo.png" HeightRequest="28" WidthRequest="85" Aspect="AspectFit" VerticalOptions="Center" />
+                <HorizontalStackLayout Grid.Column="1" Spacing="6" VerticalOptions="Center">
+                    <Label Text="&#xe55f;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#ea580c" VerticalOptions="Center"/>
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="0">
+                        <Label Text="DELIVERY ADDRESS" FontSize="9" FontAttributes="Bold" TextColor="#575e70" CharacterSpacing="0.5" />
+                        <HorizontalStackLayout Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding ActiveAddressText, FallbackValue='Home • Downtown'}" FontSize="12" FontAttributes="Bold" TextColor="#191c1e" LineBreakMode="TailTruncation" MaxLines="1"/>
+                            <Label Text="&#xe313;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#191c1e" VerticalOptions="Center" Margin="0,-2,0,0"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Grid.Column="2" Spacing="12" VerticalOptions="Center">
+                    <Grid WidthRequest="28" HeightRequest="28" VerticalOptions="Center">
+                        <Label Text="&#xe7f4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="22" TextColor="#191c1e" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        <Border BackgroundColor="#b81d27" WidthRequest="8" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,2,2,0"/>
+                    </Grid>
+                    <Border WidthRequest="32" HeightRequest="32" StrokeThickness="0" StrokeShape="RoundRectangle 16" BackgroundColor="#e0e3e5" VerticalOptions="Center">
+                        <Image x:Name="UserProfileImage" Aspect="AspectFill" />
+                    </Border>
+                </HorizontalStackLayout>
+            </Grid>
+        </Grid>
+
+        <!-- 2. ANA İÇERİK (Siparişler) VE SEPET KUTUSU -->
+        <Grid Grid.Row="1">
+
+            <ScrollView Padding="16,0,16,80">
+                <VerticalStackLayout Spacing="16" Margin="0,16,0,0">
+
+                    <!-- Başlık -->
+                    <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Orders" FontSize="24" FontAttributes="Bold" TextColor="#191c1e"/>
+                <Label x:Name="TotalOrdersCountLabel" Text="Total 0 orders recorded" FontSize="12" TextColor="#575e70"/>
+                        </VerticalStackLayout>
+                        <Border Grid.Column="1" WidthRequest="40" HeightRequest="40" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 20" StrokeThickness="0" VerticalOptions="Center">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnRefreshOrdersTapped"/>
+                            </Border.GestureRecognizers>
+                            <Label Text="&#xe5d5;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#191c1e" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                    </Grid>
+
+                    <!-- Filtre Butonları -->
+                    <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="-16,0,-16,0">
+                        <HorizontalStackLayout Spacing="8" Padding="16,4">
+                            <Border x:Name="FilterAllBorder" BackgroundColor="#f97316" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16,8">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFilterAllTapped"/>
+                                </Border.GestureRecognizers>
+                                <Label x:Name="FilterAllText" Text="All (0)" FontSize="11" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center"/>
+                            </Border>
+
+                            <Border x:Name="FilterActiveBorder" BackgroundColor="#e0e3e5" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16,8">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFilterActiveTapped"/>
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                    <BoxView x:Name="ActivePulseIndicator" Color="#f97316" WidthRequest="8" HeightRequest="8" CornerRadius="4" VerticalOptions="Center" IsVisible="False"/>
+                                    <Label x:Name="FilterActiveText" Text="Active (0)" FontSize="11" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Border x:Name="FilterCompletedBorder" BackgroundColor="#e0e3e5" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16,8">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFilterCompletedTapped"/>
+                                </Border.GestureRecognizers>
+                                <Label x:Name="FilterCompletedText" Text="Completed (0)" FontSize="11" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </ScrollView>
+
+                    <!-- DİNAMİK SİPARİŞ LİSTESİ -->
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding DisplayOrders}" Spacing="16">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16">
+                                    <Border.Shadow>
+                                        <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16"/>
+                                    </Border.Shadow>
+                                    <VerticalStackLayout Spacing="16">
+
+                                        <!-- Üst Bilgi Satırı -->
+                                        <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                                    <Label Text="{Binding OrderNumber}" FontSize="16" FontAttributes="Bold" TextColor="#191c1e"/>
+                                                    <Label Text="•" FontSize="12" TextColor="#575e70" VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding OrderDateText}" FontSize="12" TextColor="#575e70" VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                                                </HorizontalStackLayout>
+                                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                    <Label Text="{Binding TotalItemsCount, StringFormat='{0} items'}" FontSize="14" FontAttributes="Bold" TextColor="#575e70" VerticalTextAlignment="Center"/>
+                                                    <Label Text="•" FontSize="14" TextColor="#575e70" VerticalTextAlignment="Center"/>
+                                                    <Label Text="{Binding TotalAmount, StringFormat='${0:N2}'}" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" VerticalTextAlignment="Center">
+                                                        <Label.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding IsCancelled}" Value="True">
+                                                                <Setter Property="IsVisible" Value="False" />
+                                                            </DataTrigger>
+                                                        </Label.Triggers>
+                                                    </Label>
+                                                    <Label Text="{Binding TotalAmount, StringFormat='${0:N2}'}" FontSize="16" FontAttributes="Bold" TextColor="#575e70" TextDecorations="Strikethrough" VerticalTextAlignment="Center" IsVisible="{Binding IsCancelled}"/>
+                                                </HorizontalStackLayout>
+                                    <Label Text="Refunded to your card" FontSize="10" FontAttributes="Bold" TextColor="#ea580c" IsVisible="{Binding IsCancelled}"/>
+                                            </VerticalStackLayout>
+
+                                            <!-- DURUM PİLLERİ -->
+                                            <Border Grid.Column="1" BackgroundColor="#d9dff5" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="8,4" VerticalOptions="Start" IsVisible="{Binding IsActive}">
+                                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                                    <BoxView Color="#f97316" WidthRequest="7" HeightRequest="7" CornerRadius="3.5" VerticalOptions="Center" Loaded="OnPulseDotLoaded"/>
+                                                    <Label Text="{Binding EstimatedDeliveryTime, StringFormat='⚡ On The Way ({0})'}" FontSize="10" FontAttributes="Bold" TextColor="#141b2b"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                            <Border Grid.Column="1" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="8,4" VerticalOptions="Start" IsVisible="{Binding IsCompleted}">
+                                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                                    <Label Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#f97316" VerticalOptions="Center"/>
+                                                    <Label Text="Delivered" FontSize="10" FontAttributes="Bold" TextColor="#f97316"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                            <Border Grid.Column="1" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="8,4" VerticalOptions="Start" IsVisible="{Binding IsCancelled}">
+                                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                                    <Label Text="&#xe5c9;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="14" TextColor="#575e70" VerticalOptions="Center"/>
+                                        <Label Text="Cancelled" FontSize="10" FontAttributes="Bold" TextColor="#575e70"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </Grid>
+
+                                        <!-- Özet Metni -->
+                                        <Label Text="{Binding OrderSummary}" FontSize="12" TextColor="#575e70" LineBreakMode="TailTruncation" MaxLines="1"/>
+
+                                        <!-- Ürün Resimleri -->
+                                        <HorizontalStackLayout Spacing="8" Margin="0,4,0,4">
+                                            <HorizontalStackLayout BindableLayout.ItemsSource="{Binding DisplayImages}" Spacing="8">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border WidthRequest="44" HeightRequest="44" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 8" StrokeThickness="0">
+                                                            <Image Source="{Binding .}" Aspect="AspectFill" Margin="4"/>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </HorizontalStackLayout>
+                                            <Border WidthRequest="44" HeightRequest="44" BackgroundColor="#eceef0" StrokeShape="RoundRectangle 8" StrokeThickness="0" IsVisible="{Binding HasExtraImages}">
+                                                <Label Text="{Binding ExtraCountText}" FontSize="12" FontAttributes="Bold" TextColor="#575e70" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                            </Border>
+                                        </HorizontalStackLayout>
+
+                                        <!-- AKSİYON ALANI -->
+                                        <VerticalStackLayout Spacing="16" IsVisible="{Binding IsActive}">
+                                            <Border BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="12">
+                                                <Grid>
+                                                    <BoxView HeightRequest="4" Color="#e0e3e5" VerticalOptions="Center" Margin="16,0"/>
+                                                    <BoxView HeightRequest="4" Color="#f97316" WidthRequest="180" HorizontalOptions="Start" VerticalOptions="Center" Margin="16,0"/>
+                                                    <Grid ColumnDefinitions="*,*,*,*">
+                                                        <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                                                            <Border WidthRequest="28" HeightRequest="28" BackgroundColor="#f97316" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                                                                <Label Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                            </Border>
+                                                            <Label Text="Received" FontSize="10" TextColor="#191c1e" HorizontalOptions="Center"/>
+                                                        </VerticalStackLayout>
+                                                        <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                                                            <Border WidthRequest="28" HeightRequest="28" BackgroundColor="#f97316" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                                                                <Label Text="&#xe86c;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                            </Border>
+                                                            <Label Text="Prepared" FontSize="10" TextColor="#191c1e" HorizontalOptions="Center"/>
+                                                        </VerticalStackLayout>
+                                                        <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                                                            <Border WidthRequest="28" HeightRequest="28" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 14" StrokeThickness="4" Stroke="#fdba74" Loaded="OnBikeBadgeLoaded">
+                                                                <Label Text="&#xeb28;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                            </Border>
+                                                            <Label Text="On the way" FontSize="10" FontAttributes="Bold" TextColor="#ea580c" HorizontalOptions="Center"/>
+                                                        </VerticalStackLayout>
+                                                        <VerticalStackLayout Grid.Column="3" Spacing="4" HorizontalOptions="Center">
+                                                            <Border WidthRequest="28" HeightRequest="28" BackgroundColor="#e0e3e5" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                                                                <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#575e70" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                                            </Border>
+                                                            <Label Text="Delivered" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                                                        </VerticalStackLayout>
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                            <Border BackgroundColor="#f97316" StrokeShape="RoundRectangle 12" StrokeThickness="0" HeightRequest="48">
+                                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                                                    <Label Text="&#xeb28;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="22" TextColor="#ffffff" VerticalOptions="Center"/>
+                                                    <Label Text="Track Courier Live" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </VerticalStackLayout>
+
+                                        <Grid ColumnDefinitions="*, *, *" ColumnSpacing="8" IsVisible="{Binding IsCompleted}">
+                                            <Border Grid.Column="0" BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" HeightRequest="44">
+                                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                                    <Label Text="&#xe8b0;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#191c1e" VerticalOptions="Center"/>
+                                                    <Label Text="Invoice" FontSize="12" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                            <Border Grid.Column="1" BackgroundColor="#FFF7ED" StrokeShape="RoundRectangle 12" Stroke="#FDBA74" StrokeThickness="1" HeightRequest="44">
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnReviewOrderTapped" CommandParameter="{Binding .}"/>
+                                                </Border.GestureRecognizers>
+                                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                                    <Label Text="⭐" FontSize="14" VerticalOptions="Center"/>
+                                                    <Label Text="Review" FontSize="12" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                            <Border Grid.Column="2" BackgroundColor="#ea580c" StrokeShape="RoundRectangle 12" StrokeThickness="0" HeightRequest="44">
+                                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                                    <Label Text="&#xe040;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" TextColor="#ffffff" VerticalOptions="Center"/>
+                                                    <Label Text="Reorder" FontSize="12" FontAttributes="Bold" TextColor="#ffffff" VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </Border>
+                                        </Grid>
+
+                                        <Border BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" HeightRequest="44" IsVisible="{Binding IsCancelled}">
+                                            <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="6">
+                                                <Label Text="&#xF0E2;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#575e70" VerticalOptions="Center"/>
+                            <Label Text="Help &amp; Support Request" FontSize="14" FontAttributes="Bold" TextColor="#575e70" VerticalOptions="Center"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,16,0,16">
+                        <Border WidthRequest="48" HeightRequest="48" BackgroundColor="#eceef0" StrokeShape="RoundRectangle 24" StrokeThickness="0" HorizontalOptions="Center">
+                            <Label Text="&#xea35;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="28" TextColor="#ea580c" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </Border>
+                            <Label Text="Eco-Friendly Delivery" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" HorizontalOptions="Center"/>
+                            <Label Text="All your orders are delivered with our 100% electric vehicle fleet." FontSize="12" TextColor="#575e70" HorizontalTextAlignment="Center" MaxLines="2" WidthRequest="250"/>
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </ScrollView>
+
+            <!-- SABİT SEPET ÖZETİ ŞERİDİ -->
+            <Border BackgroundColor="#ea580c" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#ea580c" Offset="0,4" Opacity="0.20" Radius="12" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Fill" Padding="6,0,6,0">
+
+                    <Border Grid.Column="0" BackgroundColor="#f97316" WidthRequest="44" HeightRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0" VerticalOptions="Center">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0" Margin="0,-2,0,0">
+                        <Label Text="Cart Total" FontSize="10" TextColor="#FED7AA" Margin="0,0,0,1"/>
+                        <Label Text="{Binding TotalCartText}" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="2" BackgroundColor="#ffffff" HeightRequest="38" Padding="14,0" StrokeShape="RoundRectangle 19" StrokeThickness="0" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label Text="Go to Cart" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" />
+                            <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" Margin="0,1,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </Border>
+            <Border BackgroundColor="#ea580c" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                </Border.GestureRecognizers>
+                <Border.Shadow>
+                    <Shadow Brush="#ea580c" Offset="0,4" Opacity="0.20" Radius="12" />
+                </Border.Shadow>
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Fill" Padding="6,0,6,0">
+
+                    <Border Grid.Column="0" BackgroundColor="#f97316" WidthRequest="44" HeightRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0" VerticalOptions="Center">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="0" Margin="0,-2,0,0">
+                        <Label Text="Cart Total" FontSize="10" TextColor="#FED7AA" Margin="0,0,0,1"/>
+                        <Label Text="{Binding TotalCartText}" FontSize="16" FontAttributes="Bold" TextColor="#ffffff" />
+                    </VerticalStackLayout>
+
+                    <Border Grid.Column="2" BackgroundColor="#ffffff" HeightRequest="38" Padding="14,0" StrokeShape="RoundRectangle 19" StrokeThickness="0" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                            <Label Text="Go to Cart" FontSize="13" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" />
+                            <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" FontAttributes="Bold" TextColor="#ea580c" VerticalOptions="Center" Margin="0,1,0,0" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+            </Border>
+
+        </Grid>
+
+        <!-- 3. ALT MENÜ (NAVBAR) -->
+        <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="60" StrokeThickness="0" StrokeShape="Rectangle">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Opacity="0.05" Offset="0,-2" Radius="8"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="*,*,*,*,*" Padding="0,4">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavHomeTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                    <Label Text="Home" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavCategoriesTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                    <Label Text="Categories" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <Grid Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                        <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                        <Label Text="Cart" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Border BackgroundColor="#f97316" WidthRequest="16" HeightRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-10,0" IsVisible="{Binding HasCartItems}">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="9" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#f97316" HorizontalOptions="Center"/>
+                    <Label Text="Orders" FontSize="10" FontAttributes="Bold" TextColor="#f97316" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavProfileTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
+                    <Label Text="Profile" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>

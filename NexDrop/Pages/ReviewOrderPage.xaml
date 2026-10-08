@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="QuickDrop.Pages.ReviewOrderPage"
+             Title="Rate &amp; Review Delivery"
+             BackgroundColor="#0F172A"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- HEADER -->
+        <Border Grid.Row="0" BackgroundColor="#1E293B" StrokeThickness="0" Padding="16,14">
+            <Border.Shadow>
+                <Shadow Brush="#000000" Offset="0,4" Opacity="0.15" Radius="10"/>
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                <Border Grid.Column="0" WidthRequest="38" HeightRequest="38" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#334155" BackgroundColor="#0F172A" VerticalOptions="Center">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped"/>
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xe5c4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#F8FAFC" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                    <Label Text="Delivery &amp; Food Review" FontSize="16" FontAttributes="Bold" TextColor="#FFFFFF"/>
+                    <Label x:Name="OrderNumberHeaderLabel" Text="Order #ORD-89412" FontSize="11" TextColor="#38BDF8"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+        <!-- CONTENT -->
+        <ScrollView Grid.Row="1" Padding="16,16,16,24">
+            <VerticalStackLayout Spacing="20">
+
+                <!-- 1. RIDER EXPERIENCE CARD -->
+                <Border BackgroundColor="#1E293B" StrokeShape="RoundRectangle 16" Stroke="#334155" StrokeThickness="1" Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#0369A1" StrokeShape="RoundRectangle 20" StrokeThickness="0" Margin="0,0,10,0">
+                                <Label Text="🛵" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="Rider Delivery Experience" FontSize="14" FontAttributes="Bold" TextColor="#F8FAFC"/>
+                                <Label Text="Alex Rivers (Courier)" FontSize="11" TextColor="#94A3B8"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label Text="How was the speed and service of your courier?" FontSize="12" TextColor="#CBD5E1"/>
+
+                        <!-- Star Rating Selector (Rider) -->
+                        <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                            <Label x:Name="RiderStar1" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRiderStar1Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="RiderStar2" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRiderStar2Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="RiderStar3" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRiderStar3Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="RiderStar4" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRiderStar4Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="RiderStar5" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnRiderStar5Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+
+                        <!-- Feedback Comment -->
+                        <Border BackgroundColor="#0F172A" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#334155" Padding="12">
+                            <Editor x:Name="RiderCommentEditor" Placeholder="Feedback on rider speed, politeness, handling..." PlaceholderColor="#64748B" TextColor="#F8FAFC" FontSize="13" HeightRequest="70" AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- 2. VENDOR & FOOD QUALITY CARD -->
+                <Border BackgroundColor="#1E293B" StrokeShape="RoundRectangle 16" Stroke="#334155" StrokeThickness="1" Padding="16">
+                    <VerticalStackLayout Spacing="12">
+                        <Grid ColumnDefinitions="Auto, *">
+                            <Border Grid.Column="0" WidthRequest="40" HeightRequest="40" BackgroundColor="#C2410C" StrokeShape="RoundRectangle 20" StrokeThickness="0" Margin="0,0,10,0">
+                                <Label Text="🥗" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                <Label Text="Food Quality &amp; Packaging" FontSize="14" FontAttributes="Bold" TextColor="#F8FAFC"/>
+                                <Label Text="QuickDrop Official Vendor" FontSize="11" TextColor="#94A3B8"/>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label Text="Were items fresh, well packaged, and as expected?" FontSize="12" TextColor="#CBD5E1"/>
+
+                        <!-- Star Rating Selector (Food Quality) -->
+                        <HorizontalStackLayout Spacing="12" HorizontalOptions="Center">
+                            <Label x:Name="FoodStar1" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFoodStar1Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="FoodStar2" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFoodStar2Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="FoodStar3" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFoodStar3Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="FoodStar4" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFoodStar4Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="FoodStar5" Text="★" FontSize="36" TextColor="#FBBF24">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnFoodStar5Tapped"/>
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+
+                        <!-- Feedback Comment -->
+                        <Border BackgroundColor="#0F172A" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#334155" Padding="12">
+                            <Editor x:Name="FoodCommentEditor" Placeholder="Feedback on food freshness, temperature, packaging..." PlaceholderColor="#64748B" TextColor="#F8FAFC" FontSize="13" HeightRequest="70" AutoSize="TextChanges"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- SUBMIT BUTTON -->
+                <Button Text="Submit Rating &amp; Review" BackgroundColor="#EA580C" TextColor="#FFFFFF" FontAttributes="Bold" CornerRadius="14" HeightRequest="52" Clicked="OnSubmitReviewClicked"/>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+

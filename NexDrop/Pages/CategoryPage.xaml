@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:QuickDrop.Helpers"
+             x:Class="QuickDrop.Pages.CategoryPage"
+             Title="Categories"
+             BackgroundColor="#F8FAFC"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#EA580C</Color>
+            <Color x:Key="PrimaryContainer">#F97316</Color>
+            <Color x:Key="PrimaryFixed">#FDBA74</Color>
+            <Color x:Key="Surface">#F8FAFC</Color>
+            <Color x:Key="SurfaceContainerLowest">#FFFFFF</Color>
+            <Color x:Key="SurfaceContainerLow">#F1F5F9</Color>
+            <Color x:Key="SurfaceContainerHighest">#E2E8F0</Color>
+            <Color x:Key="MainText">#0F172A</Color>
+            <Color x:Key="SecondaryText">#64748B</Color>
+            <Color x:Key="Secondary">#64748B</Color>
+            <Color x:Key="Tertiary">#EF4444</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="*, Auto, Auto">
+
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Spacing="16" Padding="0,0,0,30">
+
+                <!-- 1. TOP DELIVERY BAR -->
+                <Border BackgroundColor="#FFFFFF" StrokeThickness="1" Stroke="#F1F5F9" Padding="16,12">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="10"/>
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Center">
+                        <Image Grid.Column="0" Source="logo.png" HeightRequest="22" WidthRequest="72" Aspect="AspectFit" VerticalOptions="Center" />
+
+                        <Grid Grid.Column="1" ColumnDefinitions="Auto, *" ColumnSpacing="8" VerticalOptions="Center">
+                            <Border Grid.Column="0" WidthRequest="32" HeightRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="#FFF7ED" VerticalOptions="Center">
+                                <Label Text="&#xe55f;" FontFamily="MaterialSymbolsOutlined-Regular" TextColor="#EA580C" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" />
+                            </Border>
+
+                            <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                                <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                    <Label Text="DELIVERY TO" FontSize="10" FontAttributes="Bold" TextColor="#EA580C" CharacterSpacing="0.8" />
+                                    <Border BackgroundColor="#ECFDF5" StrokeThickness="0" StrokeShape="RoundRectangle 6" Padding="5,1">
+                                        <Label Text="● LIVE" FontSize="8" FontAttributes="Bold" TextColor="#10B981" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                                <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding ActiveAddressText}" FontSize="13" FontAttributes="Bold" TextColor="#0F172A" LineBreakMode="TailTruncation" MaxLines="1"/>
+                                    <Label Text="⌄" FontSize="14" FontAttributes="Bold" TextColor="#64748B" VerticalOptions="Center" Margin="0,-4,0,0"/>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+                            <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8FAFC" VerticalOptions="Center">
+                                <Grid WidthRequest="36" HeightRequest="36" VerticalOptions="Center">
+                                    <Label Text="&#xe7f4;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#0F172A" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    <Border BackgroundColor="#EF4444" WidthRequest="8" HeightRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,6,6,0"/>
+                                </Grid>
+                            </Border>
+                            <Border WidthRequest="36" HeightRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="1.5" Stroke="#EA580C" BackgroundColor="#F8FAFC" VerticalOptions="Center">
+                                <Image Source="{Binding UserProfileImage}" Aspect="AspectFill" WidthRequest="36" HeightRequest="36" />
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Grid>
+                </Border>
+
+                <!-- 2. PAGE TITLE & EXPRESS BADGE -->
+                <Grid Padding="16,4,16,4" ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                    <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Categories" FontSize="24" FontAttributes="Bold" TextColor="#0F172A" CharacterSpacing="-0.5" />
+                        <Label x:Name="CategoryCountLabel" Text="All Aisles" FontSize="12" TextColor="#64748B" />
+                    </VerticalStackLayout>
+                    <Border Grid.Column="1" BackgroundColor="#ECFDF5" Padding="10,6" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#A7F3D0" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                            <Label Text="⚡" FontSize="11" VerticalOptions="Center" />
+                            <Label Text="10-15 MIN EXPRESS" FontSize="10" FontAttributes="Bold" TextColor="#047857" VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- 3. SEARCH BOX -->
+                <Border BackgroundColor="#FFFFFF" Margin="16,0" HeightRequest="46" StrokeShape="RoundRectangle 14" Stroke="#E2E8F0" StrokeThickness="1">
+                    <Border.Shadow>
+                        <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="8"/>
+                    </Border.Shadow>
+                    <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="10" Padding="14,0">
+                        <Label Grid.Column="0" Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="20" TextColor="#94A3B8" VerticalOptions="Center"/>
+                        <Entry x:Name="SearchEntry" Grid.Column="1" Placeholder="Search categories, aisles..." PlaceholderColor="#94A3B8" TextColor="#0F172A" FontSize="14" BackgroundColor="Transparent" ClearButtonVisibility="WhileEditing" VerticalOptions="Center" Margin="0" TextChanged="OnSearchTextChanged"/>
+                        <Border Grid.Column="2" BackgroundColor="#F1F5F9" StrokeShape="RoundRectangle 6" StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
+                            <Label Text="⌘K" FontSize="11" FontAttributes="Bold" TextColor="#64748B" />
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <!-- 4. QUICK FILTERS -->
+                <CollectionView x:Name="FiltersCollectionView" HeightRequest="44" Margin="0,2,0,0">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="Android,iOS,WinUI" Value="16,0,16,2" />
+                        </OnPlatform>
+                    </CollectionView.Margin>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="14,6" StrokeShape="RoundRectangle 20" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#FFFFFF" VerticalOptions="Center">
+                                <Border.Shadow>
+                                    <Shadow Brush="#0F172A" Offset="0,2" Opacity="0.03" Radius="4" />
+                                </Border.Shadow>
+                                <Label Text="{Binding Name}" FontSize="12" FontAttributes="None" TextColor="#64748B" VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding IsActive}" Value="True">
+                                            <Setter Property="TextColor" Value="#FFFFFF" />
+                                            <Setter Property="FontAttributes" Value="Bold" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding IsActive}" Value="True">
+                                        <Setter Property="BackgroundColor" Value="#EA580C" />
+                                        <Setter Property="StrokeThickness" Value="0" />
+                                        <Setter Property="Shadow">
+                                            <Setter.Value>
+                                                <Shadow Brush="#EA580C" Offset="0,3" Opacity="0.25" Radius="8" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Border.Triggers>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- 5. CATEGORIES GRID -->
+                <CollectionView x:Name="CategoriesCollectionView" Margin="16,8,16,20">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="12" VerticalItemSpacing="12" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border StrokeThickness="1" Stroke="#F1F5F9" StrokeShape="RoundRectangle 18" Padding="14" BackgroundColor="#FFFFFF">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnCategoryTapped" />
+                                </Border.GestureRecognizers>
+                                <Border.Shadow>
+                                    <Shadow Brush="#0F172A" Offset="0,4" Opacity="0.04" Radius="14" />
+                                </Border.Shadow>
+                                <Grid RowDefinitions="Auto, *, Auto">
+                                    <!-- Header Row: Items Count badge & Chevron -->
+                                    <Grid Grid.Row="0" ColumnDefinitions="Auto, *">
+                                        <Border Grid.Column="0" BackgroundColor="#FFF7ED" StrokeThickness="1" Stroke="#FDBA74" StrokeShape="RoundRectangle 8" Padding="7,3">
+                                            <Label Text="{Binding ProductCount, StringFormat='{0} Items'}" TextColor="#EA580C" FontSize="10" FontAttributes="Bold" />
+                                        </Border>
+                                        <Label Grid.Column="1" Text="&#xe5cc;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="18" TextColor="#94A3B8" HorizontalOptions="End" VerticalOptions="Center" />
+                                    </Grid>
+
+                                    <!-- Category Image Preview -->
+                                    <Border Grid.Row="1" BackgroundColor="#F8FAFC" StrokeThickness="0" StrokeShape="RoundRectangle 14" HeightRequest="95" Margin="0,10">
+                                        <Image Source="{Binding Image}" Aspect="AspectFit" Margin="6" />
+                                    </Border>
+
+                                    <!-- Category Title & Description -->
+                                    <VerticalStackLayout Grid.Row="2" Spacing="2">
+                                        <Label Text="{Binding Name}" FontSize="14" FontAttributes="Bold" TextColor="#0F172A" LineBreakMode="TailTruncation" MaxLines="1" />
+                                        <Label Text="{Binding Description}" FontSize="11" TextColor="#64748B" LineBreakMode="TailTruncation" MaxLines="1" />
+                                    </VerticalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- 6. FLOATING CART SUMMARY -->
+        <Border BackgroundColor="#EA580C" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+            </Border.GestureRecognizers>
+            <Border.Shadow>
+                <Shadow Brush="#0F172A" Offset="0,6" Opacity="0.25" Radius="16" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" VerticalOptions="Fill" Padding="6,0,8,0">
+
+                <Border Grid.Column="0" BackgroundColor="#F97316" WidthRequest="40" HeightRequest="40" StrokeShape="RoundRectangle 20" StrokeThickness="0" VerticalOptions="Center">
+                    <Label Text="{Binding UniqueCartItemCount}" FontSize="15" FontAttributes="Bold" TextColor="#FFFFFF" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="-1">
+                    <Label Text="Cart Total" FontSize="10" TextColor="#FED7AA" />
+                    <Label Text="{Binding TotalCartText}" FontSize="16" FontAttributes="Bold" TextColor="#FFFFFF" />
+                </VerticalStackLayout>
+
+                <Border Grid.Column="2" BackgroundColor="#FFFFFF" HeightRequest="38" Padding="16,0" StrokeShape="RoundRectangle 19" StrokeThickness="0" VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                        <Label Text="Go to Cart" FontSize="13" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center" />
+                        <Label Text="&#xe5c8;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="16" FontAttributes="Bold" TextColor="#EA580C" VerticalOptions="Center" Margin="0,1,0,0" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- 7. BOTTOM NAVIGATION BAR -->
+        <Border Grid.Row="2" BackgroundColor="#FFFFFF" StrokeThickness="1" Stroke="#F1F5F9" Padding="0,8,0,14">
+            <Border.Shadow>
+                <Shadow Brush="#0F172A" Offset="0,-4" Opacity="0.04" Radius="16" />
+            </Border.Shadow>
+            <Grid ColumnDefinitions="*,*,*,*,*" Padding="0,2">
+
+                <!-- Home -->
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavHomeTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe88a;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Home" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Categories (Active) -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <Label Text="&#xe8b6;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#EA580C" HorizontalOptions="Center"/>
+                    <Label Text="Categories" FontSize="10" FontAttributes="Bold" TextColor="#EA580C" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Cart -->
+                <Grid Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                        <VerticalStackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnNavCartTapped"/>
+                        </VerticalStackLayout.GestureRecognizers>
+                        <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                        <Label Text="Cart" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <Border BackgroundColor="#EA580C" WidthRequest="16" HeightRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-2,-6,0" IsVisible="{Binding HasCartItems}">
+                        <Label Text="{Binding UniqueCartItemCount}" FontSize="9" FontAttributes="Bold" TextColor="#FFFFFF" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Grid>
+
+                <!-- Orders -->
+                <VerticalStackLayout Grid.Column="3" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavOrdersTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Orders" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+
+                <!-- Profile -->
+                <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
+                    <VerticalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNavProfileTapped"/>
+                    </VerticalStackLayout.GestureRecognizers>
+                    <Label Text="&#xe7fd;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#64748B" HorizontalOptions="Center"/>
+                    <Label Text="Profile" FontSize="10" TextColor="#64748B" HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+
+    </Grid>
+</ContentPage>
