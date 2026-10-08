@@ -14,6 +14,7 @@
 ## 📌 Table of Contents
 
 - [Overview](#-overview)
+- [Screenshots & UI Showcase](#-screenshots--ui-showcase)
 - [Key Features](#-key-features)
   - [1. Multi-Portal Architecture & Roles](#1-multi-portal-architecture--roles)
   - [2. Google Gemini AI Engine](#2-google-gemini-ai-engine)
@@ -36,6 +37,29 @@
 ## 🚀 Overview
 
 QuickDrop bridges rapid retail commerce and intelligent culinary planning. Rather than traditional static catalogs, QuickDrop combines **generative AI meal planning** with **direct grocery basket fulfillment**, synchronized dispatch queues for delivery couriers, real-time store monitoring for vendors, and administrative tools for super administrators.
+
+---
+
+## 📱 Screenshots & UI Showcase
+
+<div align="center">
+
+### 🛍️ Storefront & Discovery
+| Home & Deals | Categories | Product Details | Cart & Checkout |
+| :---: | :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/home_page.png" width="220" alt="Home Screen"/> | <img src="NexDrop/Resources/SS/category.png" width="220" alt="Categories"/> | <img src="NexDrop/Resources/SS/product_detail.png" width="220" alt="Product Detail"/> | <img src="NexDrop/Resources/SS/cart.png" width="220" alt="Cart"/> |
+
+### 🤖 Gemini AI Recipe Generator & Orders
+| AI Recipe Assistant | Ingredients to Cart | Live Tracking | Order History |
+| :---: | :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/ai_bot.png" width="220" alt="AI Recipe Assistant"/> | <img src="NexDrop/Resources/SS/ai_bot2.png" width="220" alt="AI Basket Sync"/> | <img src="NexDrop/Resources/SS/order.png" width="220" alt="Order Tracking"/> | <img src="NexDrop/Resources/SS/order2.png" width="220" alt="Order History"/> |
+
+### ⚡ Gamification, Analytics & Profile
+| Wheel of Fortune | Rewards & Coupons | Analytics & KPIs | User Profile |
+| :---: | :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/wheelpage.png" width="220" alt="Wheel of Fortune"/> | <img src="NexDrop/Resources/SS/coupons.png" width="220" alt="Coupons"/> | <img src="NexDrop/Resources/SS/statistics.png" width="220" alt="Statistics"/> | <img src="NexDrop/Resources/SS/profile.png" width="220" alt="Profile"/> |
+
+</div>
 
 ---
 
