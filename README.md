@@ -44,20 +44,20 @@ QuickDrop bridges rapid retail commerce and intelligent culinary planning. Rathe
 
 <div align="center">
 
-### 🛍️ Storefront & Discovery
-| Home & Deals | Categories | Product Details | Cart & Checkout |
-| :---: | :---: | :---: | :---: |
-| <img src="NexDrop/Resources/SS/home_page.png" width="220" alt="Home Screen"/> | <img src="NexDrop/Resources/SS/category.png" width="220" alt="Categories"/> | <img src="NexDrop/Resources/SS/product_detail.png" width="220" alt="Product Detail"/> | <img src="NexDrop/Resources/SS/cart.png" width="220" alt="Cart"/> |
+### 🚀 Onboarding & Authentication
+| Splash Screen | Login & One-Tap Roles | Auth & Dynamic Geolocation |
+| :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/SplashScreen.png" width="250" alt="Splash Screen"/> | <img src="NexDrop/Resources/SS/LoginScreen.png" width="250" alt="Login Screen"/> | <img src="NexDrop/Resources/SS/AuthenticationSuccessfull.png" width="250" alt="Auth Success Notification"/> |
 
-### 🤖 Gemini AI Recipe Generator & Orders
-| AI Recipe Assistant | Ingredients to Cart | Live Tracking | Order History |
-| :---: | :---: | :---: | :---: |
-| <img src="NexDrop/Resources/SS/ai_bot.png" width="220" alt="AI Recipe Assistant"/> | <img src="NexDrop/Resources/SS/ai_bot2.png" width="220" alt="AI Basket Sync"/> | <img src="NexDrop/Resources/SS/order.png" width="220" alt="Order Tracking"/> | <img src="NexDrop/Resources/SS/order2.png" width="220" alt="Order History"/> |
+### 🛍️ Customer Storefront & Catalog
+| Home & Grocery Deals | Aisles & Categories | Products & Filter |
+| :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/CustomerDashboard.png" width="250" alt="Customer Dashboard"/> | <img src="NexDrop/Resources/SS/CategoriesWiseProducts.png" width="250" alt="Categories View"/> | <img src="NexDrop/Resources/SS/CategoriesProduct.png" width="250" alt="Products Catalog"/> |
 
-### ⚡ Gamification, Analytics & Profile
-| Wheel of Fortune | Rewards & Coupons | Analytics & KPIs | User Profile |
-| :---: | :---: | :---: | :---: |
-| <img src="NexDrop/Resources/SS/wheelpage.png" width="220" alt="Wheel of Fortune"/> | <img src="NexDrop/Resources/SS/coupons.png" width="220" alt="Coupons"/> | <img src="NexDrop/Resources/SS/statistics.png" width="220" alt="Statistics"/> | <img src="NexDrop/Resources/SS/profile.png" width="220" alt="Profile"/> |
+### 🤖 Gemini AI Recipe Assistant & Orders
+| QuickBot AI Recipe Assistant | Real-Time Cart & Checkout | Live Courier Tracking |
+| :---: | :---: | :---: |
+| <img src="NexDrop/Resources/SS/QuickBotAI.png" width="250" alt="QuickBot AI Assistant"/> | <img src="NexDrop/Resources/SS/MyCartScreen.png" width="250" alt="Cart Screen"/> | <img src="NexDrop/Resources/SS/TrackingOrder.png" width="250" alt="Order Tracking"/> |
 
 </div>
 
