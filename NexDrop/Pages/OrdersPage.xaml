@@ -9,7 +9,7 @@
 
     <Grid RowDefinitions="Auto, *, Auto">
 
-        <!-- 1. ÜST BİLGİ ÇUBUĞU (HEADER) -->
+        <!-- 1. TOP HEADER BAR -->
         <Grid Grid.Row="0" HeightRequest="65" Padding="16,0" BackgroundColor="#ffffff" VerticalOptions="Start" ZIndex="10">
             <Grid.Shadow>
                 <Shadow Brush="#000000" Opacity="0.04" Offset="0,1" Radius="8"/>
@@ -38,13 +38,13 @@
             </Grid>
         </Grid>
 
-        <!-- 2. ANA İÇERİK (Siparişler) VE SEPET KUTUSU -->
+        <!-- 2. MAIN CONTENT (Orders) AND CART BOX -->
         <Grid Grid.Row="1">
 
             <ScrollView Padding="16,0,16,80">
                 <VerticalStackLayout Spacing="16" Margin="0,16,0,0">
 
-                    <!-- Başlık -->
+                    <!-- Header Title -->
                     <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
                         <VerticalStackLayout Grid.Column="0">
                             <Label Text="Orders" FontSize="24" FontAttributes="Bold" TextColor="#191c1e"/>
@@ -58,7 +58,7 @@
                         </Border>
                     </Grid>
 
-                    <!-- Filtre Butonları -->
+                    <!-- Filter Buttons -->
                     <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="-16,0,-16,0">
                         <HorizontalStackLayout Spacing="8" Padding="16,4">
                             <Border x:Name="FilterAllBorder" BackgroundColor="#f97316" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16,8">
@@ -87,7 +87,7 @@
                         </HorizontalStackLayout>
                     </ScrollView>
 
-                    <!-- DİNAMİK SİPARİŞ LİSTESİ -->
+                    <!-- DYNAMIC ORDERS LIST -->
                     <VerticalStackLayout BindableLayout.ItemsSource="{Binding DisplayOrders}" Spacing="16">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
@@ -97,7 +97,7 @@
                                     </Border.Shadow>
                                     <VerticalStackLayout Spacing="16">
 
-                                        <!-- Üst Bilgi Satırı -->
+                                        <!-- Top Info Row -->
                                         <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
                                             <VerticalStackLayout Grid.Column="0" Spacing="2">
                                                 <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
@@ -120,7 +120,7 @@
                                     <Label Text="Refunded to your card" FontSize="10" FontAttributes="Bold" TextColor="#ea580c" IsVisible="{Binding IsCancelled}"/>
                                             </VerticalStackLayout>
 
-                                            <!-- DURUM PİLLERİ -->
+                                            <!-- STATUS PILLS -->
                                             <Border Grid.Column="1" BackgroundColor="#d9dff5" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="8,4" VerticalOptions="Start" IsVisible="{Binding IsActive}">
                                                 <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
                                                     <BoxView Color="#f97316" WidthRequest="7" HeightRequest="7" CornerRadius="3.5" VerticalOptions="Center" Loaded="OnPulseDotLoaded"/>
@@ -141,10 +141,10 @@
                                             </Border>
                                         </Grid>
 
-                                        <!-- Özet Metni -->
+                                        <!-- Summary Text -->
                                         <Label Text="{Binding OrderSummary}" FontSize="12" TextColor="#575e70" LineBreakMode="TailTruncation" MaxLines="1"/>
 
-                                        <!-- Ürün Resimleri -->
+                                        <!-- Product Thumbnails -->
                                         <HorizontalStackLayout Spacing="8" Margin="0,4,0,4">
                                             <HorizontalStackLayout BindableLayout.ItemsSource="{Binding DisplayImages}" Spacing="8">
                                                 <BindableLayout.ItemTemplate>
@@ -160,7 +160,7 @@
                                             </Border>
                                         </HorizontalStackLayout>
 
-                                        <!-- AKSİYON ALANI -->
+                                        <!-- ACTION AREA -->
                                         <VerticalStackLayout Spacing="16" IsVisible="{Binding IsActive}">
                                             <Border BackgroundColor="#f2f4f6" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="12">
                                                 <Grid>
@@ -250,7 +250,7 @@
                 </VerticalStackLayout>
             </ScrollView>
 
-            <!-- SABİT SEPET ÖZETİ ŞERİDİ -->
+            <!-- FIXED CART SUMMARY BAR -->
             <Border BackgroundColor="#ea580c" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnNavCartTapped"/>
@@ -306,7 +306,7 @@
 
         </Grid>
 
-        <!-- 3. ALT MENÜ (NAVBAR) -->
+        <!-- 3. BOTTOM NAVBAR -->
         <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="60" StrokeThickness="0" StrokeShape="Rectangle">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.05" Offset="0,-2" Radius="8"/>

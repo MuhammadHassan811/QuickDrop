@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="QuickDrop.Pages.CouponsPage"
@@ -9,7 +9,7 @@
 
     <Grid RowDefinitions="Auto, *, Auto">
 
-        <!-- 1. ÜST BİLGİ ÇUBUĞU (HEADER) -->
+        <!-- 1. TOP HEADER BAR -->
         <Grid Grid.Row="0" HeightRequest="60" Padding="16,0" BackgroundColor="#ffffff" VerticalOptions="Start" ZIndex="10" HorizontalOptions="Fill">
             <Grid.Shadow>
                 <Shadow Brush="#000000" Opacity="0.04" Offset="0,1" Radius="8"/>
@@ -26,13 +26,13 @@
             </Grid>
         </Grid>
 
-        <!-- 2. ANA İÇERİK VE SEPET ŞERİDİ -->
+        <!-- 2. MAIN CONTENT AND CART BAR -->
         <Grid Grid.Row="1">
 
             <ScrollView Padding="0,0,0,85">
                 <VerticalStackLayout Spacing="0" HorizontalOptions="Fill">
 
-                    <!-- Sekmeler (Tabs) -->
+                    <!-- Tabs -->
                     <Border BackgroundColor="#ffffff" StrokeThickness="0" Padding="16,12" ZIndex="5" HorizontalOptions="Fill">
                         <Border.Shadow>
                             <Shadow Brush="#000000" Opacity="0.02" Offset="0,2" Radius="4"/>
@@ -54,7 +54,7 @@
 
                     <VerticalStackLayout Spacing="24" Padding="16" HorizontalOptions="Fill">
 
-                        <!-- HEDİYE ÇARKI AFİŞİ -->
+                        <!-- GIFT WHEEL BANNER -->
                         <Border BackgroundColor="#ea580c" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16" HorizontalOptions="Fill">
                             <Border.Shadow>
                                 <Shadow Brush="#f97316" Offset="0,4" Opacity="0.3" Radius="12"/>
@@ -76,7 +76,7 @@
                             </Grid>
                         </Border>
 
-                        <!-- İndirim Kodu Ekle -->
+                        <!-- Add Coupon Code -->
                         <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16" HorizontalOptions="Fill">
                             <Border.Shadow>
                                 <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16"/>
@@ -97,7 +97,7 @@
                             </VerticalStackLayout>
                         </Border>
 
-                        <!-- Kullanıma Hazır Kuponlar -->
+                        <!-- Ready to Use Coupons -->
                         <VerticalStackLayout Spacing="16" HorizontalOptions="Fill">
                             <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center" HorizontalOptions="Fill">
                                 <Label Grid.Column="0" Text="Available Coupons" FontSize="16" FontAttributes="Bold" TextColor="#191c1e" VerticalOptions="Center"/>
@@ -115,7 +115,7 @@
                                             </Border.Shadow>
                                             <VerticalStackLayout Spacing="0" HorizontalOptions="Fill">
 
-                                                <!-- Üst Kısım -->
+                                                <!-- Top Section -->
                                                 <Grid ColumnDefinitions="Auto, *" ColumnSpacing="12" Padding="16">
                                                     <Border Grid.Column="0" WidthRequest="56" HeightRequest="56" BackgroundColor="#fff7ed" StrokeShape="RoundRectangle 16" StrokeThickness="0" VerticalOptions="Start">
                                                         <Label Text="&#xe8cc;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="28" TextColor="#f97316" HorizontalOptions="Center" VerticalOptions="Center"/>
@@ -123,7 +123,7 @@
                                                     <VerticalStackLayout Grid.Column="1" Spacing="4">
                                                         <Grid ColumnDefinitions="*, Auto" HorizontalOptions="Fill">
                                                             <Label Grid.Column="0" Text="{Binding Title}" FontSize="20" FontAttributes="Bold" TextColor="#f97316"/>
-                                                            <!-- DİNAMİK ZAMAN SAYACI -->
+                                                            <!-- DYNAMIC COUNTDOWN TIMER -->
                                                             <Border Grid.Column="1" BackgroundColor="#ffe8e8" StrokeShape="RoundRectangle 8" StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
                                                                 <HorizontalStackLayout Spacing="4" VerticalOptions="Center">
                                                                     <Label Text="&#xe425;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="12" TextColor="#b81d27" VerticalOptions="Center"/>
@@ -159,7 +159,7 @@
                             </VerticalStackLayout>
                         </VerticalStackLayout>
 
-                        <!-- Gold Üye Afişi -->
+                        <!-- Gold Member Banner -->
                         <Border BackgroundColor="#475569" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="24" HorizontalOptions="Fill">
                             <VerticalStackLayout Spacing="8">
                                 <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
@@ -183,7 +183,7 @@
                             </VerticalStackLayout>
                         </Border>
 
-                        <!-- Arkadaşını Davet Et -->
+                        <!-- Invite a Friend -->
                         <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="20" HorizontalOptions="Fill">
                             <Border.Shadow>
                                 <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16"/>
@@ -213,7 +213,7 @@
                                     </Grid>
                                 </Border>
 
-                                <!-- ÜST ÜSTE BİNEN KİŞİ ROZETLERİ -->
+                                <!-- OVERLAPPING USER BADGES -->
                                 <Grid ColumnDefinitions="Auto, *, Auto" HorizontalOptions="Fill" VerticalOptions="Center">
                                     <HorizontalStackLayout Grid.Column="0" Spacing="-8" VerticalOptions="Center">
                                         <Border WidthRequest="28" HeightRequest="28" BackgroundColor="#d9dff5" Stroke="#ffffff" StrokeThickness="2" StrokeShape="RoundRectangle 14" Padding="0">
@@ -232,7 +232,7 @@
                             </VerticalStackLayout>
                         </Border>
 
-                        <!-- Kuponlar Nasıl Kullanılır? -->
+                        <!-- How to Use Coupons? -->
                         <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="20" HorizontalOptions="Fill">
                             <Border.Shadow>
                                 <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16"/>
@@ -275,7 +275,7 @@
                 </VerticalStackLayout>
             </ScrollView>
 
-            <!-- SEPET ŞERİDİ  -->
+            <!-- CART SUMMARY STRIP -->
             <Border BackgroundColor="#ea580c" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnNavCartTapped"/>
@@ -305,7 +305,7 @@
 
         </Grid>
 
-        <!-- 3. ALT MENÜ (NAVBAR) -->
+        <!-- 3. BOTTOM NAVBAR -->
         <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="60" StrokeThickness="0" StrokeShape="Rectangle">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.05" Offset="0,-2" Radius="8"/>
@@ -327,7 +327,7 @@
                     <Label Text="Categories" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
 
-                <!-- SEPET VE BİLDİRİM ROZETİ -->
+                <!-- CART AND NOTIFICATION BADGE -->
                 <Grid Grid.Column="2" HorizontalOptions="Center" VerticalOptions="Center">
                     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
                         <VerticalStackLayout.GestureRecognizers>

@@ -38,12 +38,12 @@
             </Grid>
         </Border>
 
-        <!-- 2. ANA İÇERİK VE SEPET ŞERİDİ -->
+        <!-- 2. MAIN CONTENT AND CART BAR -->
         <Grid Grid.Row="1">
             <ScrollView Padding="16,16,16,85">
                 <VerticalStackLayout Spacing="24">
 
-                    <!-- Başlık ve Kullanıcı -->
+                    <!-- Header and User Info -->
                     <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
                         <VerticalStackLayout Grid.Column="0" Spacing="2">
                             <Label Text="Shopping Statistics" FontSize="24" FontAttributes="Bold" TextColor="#191c1e"/>
@@ -57,7 +57,7 @@
                         </Border>
                     </Grid>
 
-                    <!-- Zaman Çipleri -->
+                    <!-- Time Chips -->
                     <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="-16,0">
                         <HorizontalStackLayout Spacing="8" Padding="16,0">
                             <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 20" StrokeThickness="1" Stroke="#e0e3e5" Padding="16,8">
@@ -75,7 +75,7 @@
                         </HorizontalStackLayout>
                     </ScrollView>
 
-                    <!-- 2x2 Dashboard Kartları -->
+                    <!-- 2x2 Dashboard Cards -->
                     <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="*, *" RowSpacing="12" ColumnSpacing="12">
 
                         <Border Grid.Row="0" Grid.Column="0" BackgroundColor="#ffffff" StrokeShape="RoundRectangle 12" StrokeThickness="0" Padding="12">
@@ -159,7 +159,7 @@
                         </Border>
                     </Grid>
 
-                    <!-- AYLIK HARCAMA GRAFİĞİ -->
+                    <!-- MONTHLY SPENDING CHART -->
                     <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16">
                         <Border.Shadow>
                             <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16" />
@@ -197,7 +197,7 @@
                         </VerticalStackLayout>
                     </Border>
 
-                    <!-- KATEGORİYE GÖRE DAĞILIM -->
+                    <!-- BREAKDOWN BY CATEGORY -->
                     <Border BackgroundColor="#ffffff" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="16">
                         <Border.Shadow>
                             <Shadow Brush="#111827" Offset="0,4" Opacity="0.05" Radius="16" />
@@ -236,7 +236,7 @@
                         </VerticalStackLayout>
                     </Border>
 
-                    <!-- EN ÇOK TERCİH ETTİKLERİNİZ -->
+                    <!-- TOP ORDERED PRODUCTS -->
                     <VerticalStackLayout Spacing="12">
                         <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
                             <VerticalStackLayout Grid.Column="0">
@@ -300,7 +300,7 @@
                 </VerticalStackLayout>
             </ScrollView>
 
-            <!-- SABİT SEPET ÖZETİ ŞERİDİ -->
+            <!-- FIXED CART SUMMARY BAR -->
             <Border BackgroundColor="#ea580c" HeightRequest="56" Margin="16,0,16,16" StrokeShape="RoundRectangle 28" StrokeThickness="0" IsVisible="{Binding HasCartItems}" VerticalOptions="End">
                 <Border.GestureRecognizers>
                     <TapGestureRecognizer Tapped="OnNavCartTapped"/>
@@ -330,7 +330,7 @@
 
         </Grid>
 
-        <!-- 3. ALT MENÜ ÇUBUĞU (SABİT NAVBAR) -->
+        <!-- 3. BOTTOM NAVBAR (FIXED) -->
         <Border Grid.Row="2" BackgroundColor="#ffffff" HeightRequest="60" StrokeThickness="0" StrokeShape="Rectangle">
             <Border.Shadow>
                 <Shadow Brush="#000000" Opacity="0.05" Offset="0,-2" Radius="8"/>
@@ -358,7 +358,7 @@
                         <Label Text="&#xe8cb;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
                         <Label Text="Cart" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
-                    <!-- SEPET VE BİLDİRİM ROZETİ -->
+                    <!-- CART AND NOTIFICATION BADGE -->
                     <Border BackgroundColor="#f97316" WidthRequest="16" HeightRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" HorizontalOptions="End" VerticalOptions="Start" Margin="0,-4,-10,0" IsVisible="{Binding HasCartItems}">
                         <Label Text="{Binding UniqueCartItemCount}" FontSize="9" FontAttributes="Bold" TextColor="#ffffff" HorizontalOptions="Center" VerticalOptions="Center" />
                     </Border>
@@ -370,7 +370,7 @@
                     <Label Text="&#xEF6E;" FontFamily="MaterialSymbolsOutlined-Regular" FontSize="24" TextColor="#575e70" HorizontalOptions="Center"/>
                     <Label Text="Orders" FontSize="10" TextColor="#575e70" HorizontalOptions="Center"/>
                 </VerticalStackLayout>
-                <!-- AKTİF PROFİL SEKMESİ -->
+                <!-- ACTIVE PROFILE TAB -->
                 <VerticalStackLayout Grid.Column="4" HorizontalOptions="Center" VerticalOptions="Center" Spacing="2">
                     <VerticalStackLayout.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnNavProfileTapped"/>
